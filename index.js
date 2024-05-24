@@ -5,13 +5,13 @@ import path from "path"
 import ejs from "ejs"
 import { fileURLToPath } from "url";
 
- 
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
 
-import apiRoutes from "./routes/api.js"; 
+import apiRoutes from "./routes/api.js";
 
 const app = express();
 
