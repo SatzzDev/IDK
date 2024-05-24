@@ -163,7 +163,7 @@ status: false,
 creator: "SatganzDevs",
 message: "Masukkan parameter q",
 });
-let { pitutur } = (await import("./berita"));
+let { pitutur } = (await import("./berita.js"));
 let riss = await pitutur(q);
 res.json(riss);
 });
@@ -177,7 +177,7 @@ status: false,
 creator: "SatganzDevs",
 message: "Masukkan parameter url!",
 });
-let { instaDL } = (await import("./snapinsta"));
+let { instaDL } = (await import("./snapinsta.js"));
 let riss = await instaDL(url);
 res.json(riss);
 });
@@ -191,7 +191,7 @@ status: false,
 creator: "SatganzDevs",
 message: "Masukkan parameter url!",
 });
-let { loveTik } = (await import("./lovetik"));
+let { loveTik } = (await import("./lovetik.js"));
 let riss = await loveTik(url);
 res.json(riss);
 });
@@ -205,7 +205,7 @@ status: false,
 creator: "SatganzDevs",
 message: "Masukkan parameter query!",
 });
-let { xnxxsearch } = (await import("./xnxx"));
+let { xnxxsearch } = (await import("./xnxx.js"));
 let riss = await xnxxsearch(query);
 res.json(riss);
 });
@@ -219,7 +219,7 @@ status: false,
 creator: "SatganzDevs",
 message: "Masukkan parameter url!",
 });
-let { xnxxdl } = (await import("./xnxx"));
+let { xnxxdl } = (await import("./xnxx.js"));
 let riss = await xnxxdl(url);
 res.json(riss);
 });
