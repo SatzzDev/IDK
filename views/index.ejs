@@ -456,11 +456,9 @@ const audioIcon = document.getElementById("audio-icon");
 const trackName = document.getElementById("trackName");
 const albumArt = document.getElementById("albumArt");
 
-
 const getTrackName = (url) => {
 return decodeURIComponent(url.substring(url.lastIndexOf('/') + 1).replace(/\%20/g, ' '));
 };
-
 
 const updateTrackName = () => {
 const name = getTrackName(audio.src);
@@ -477,17 +475,20 @@ artwork: [
 }
 };
 
-
 const toggleAudio = async () => {
 if (audio.paused) {
 audioIcon.classList.remove("fe-play");
 audioIcon.classList.add("fe-loader");
+try {
 await audio.play();
 audioIcon.classList.remove("fe-loader");
 audioIcon.classList.add("fe-pause");
 trackName.classList.add('marquee'); 
 albumArt.classList.add('rotating'); 
 updateTrackName(); 
+} catch (error) {
+console.error('Error playing audio:', error);
+}
 } else {
 audioIcon.classList.remove("fe-pause");
 audioIcon.classList.add("fe-loader");
@@ -499,26 +500,24 @@ albumArt.classList.remove('rotating');
 }
 };
 
-
-const changeAudio = (url) => {
-audio.pause();  
+const changeAudio = async (url) => {
+if (!audio.paused) {
+await audio.pause();  
+}
 audio.currentTime = 0; 
 audio.src = url; 
 toggleAudio(); 
 updateTrackName(); 
 };
 
-
 audioSwitcher.addEventListener("click", () => {
 toggleAudio();
 });
-
 
 audio.addEventListener("ended", () => {
 const nextAudio = list[Math.floor(Math.random() * list.length)];
 changeAudio(nextAudio.url);
 });
-
 
 const djList = document.getElementById('dj-list');
 const dropList = document.getElementById('drop-list');
@@ -542,11 +541,8 @@ sadList.appendChild(li);
 }
 });
 
-
 const initialAudio = list[Math.floor(Math.random() * list.length)];
 changeAudio(initialAudio.url);
-
-
 
 
 $("#fullScreenSwitcher").on("click", async() => {
