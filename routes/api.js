@@ -64,6 +64,21 @@ console.error(`Failed to fetch from ${videoUrl}:`, error);
 }
 }
 }
+async function fetchRandomVideo() {
+while (true) {
+const { randomVid } = await import('./asupan.js');
+const result = await randomVid('https://urlebird.com/id/user/ph0nk0ne/')
+const videoUrl = result[Math.floor(Math.random() * result.length)];;
+try {
+const response = await axios.head(videoUrl);
+if (response.headers['content-type'].startsWith('video/')) {
+return videoUrl;
+}
+} catch (error) {
+console.error(`Failed to fetch from ${videoUrl}:`, error);
+}
+}
+}
 //━━━━━━━━━━━━━━━[ ROUTES ]━━━━━━━━━━━━━━━━━//
 // Route definitions
 router.get('/tts', async (req, res) => {
@@ -335,19 +350,11 @@ router.get('/storyanime', async (req, res) => {
 
 router.get('/storymusic', async (req, res) => {
     try {
-        const users = [
-            'https://tikgun.com/username/6971740825177506821',
-            'https://tikgun.com/username/6932714198158115841',
-            'https://tikgun.com/username/7097573996917965851',
-        ];
-        const usr = users[Math.floor(Math.random() * users.length)];
-        const rez = await axios.get(usr);
-        const $ = cheerio.load(rez.data);
-        const videoUrls = $('video source').map((i, el) => $(el).attr('src')).get();
-        const result = videoUrls[Math.floor(Math.random() * videoUrls.length)];
+        const videoUrl = await fetchRandomVideo();
+
         // Mengambil video dari URL
         const response = await axios({
-            url: result,
+            url: videoUrl,
             method: 'GET',
             responseType: 'stream'
         });
@@ -360,6 +367,7 @@ router.get('/storymusic', async (req, res) => {
 
         // Mengalirkan konten video ke respons
         response.data.pipe(res);
+
     } catch (error) {
         console.error(error);
         res.status(500).send('Error occurred while processing request');
