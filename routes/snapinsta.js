@@ -1,9 +1,9 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 
-export const instaDL = async (url) => {
+export const instaDL = async (urls) => {
 try {
-const response = await axios.post('https://snapinsta.to/api/ajaxSearch', `q=${encodeURIComponent(url)}&t=media&lang=en`, {
+const response = await axios.post('https://v3.igdownloader.app/api/ajaxSearch', `q=${encodeURIComponent(urls)}&t=media&lang=en`, {
 headers: {
 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
 'Origin': 'https://snapinsta.to',
@@ -14,9 +14,9 @@ headers: {
 });
 const data = response.data.data;
 const $ = cheerio.load(data);
-let urls = $('div.download-items__btn a').attr('href')
+let url = $('div.download-items__btn a').attr('href')
 let thumb = $('div.download-items__thumb').find('img').attr('src')
-return {status: 'ok', creator: 'SatganzDevs',urls,thumb};
+return {status: 'ok', creator: 'SatganzDevs',url,thumb};
 } catch (error) {
 console.error('Error scraping:', error);
 return {
