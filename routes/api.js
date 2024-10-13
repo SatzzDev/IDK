@@ -28,6 +28,24 @@ return err;
 }
 };
 
+
+router.get("/thmb", async(req,res) => {
+let img = [
+"https://i.pinimg.com/originals/4c/7f/b6/4c7fb6fa1a8a49f8e14dc02a7cbe3860.jpg",
+"https://i.pinimg.com/originals/6e/5d/71/6e5d71ae714f3d40795d919c3d8aa40a.jpg",
+"https://i.pinimg.com/originals/44/cb/ff/44cbff62271f1f860b3ec3a3f9834ef4.jpg",
+"https://i.pinimg.com/originals/3c/86/4e/3c864e50a0fb0bd36731398329da1321.jpg",
+"https://i.pinimg.com/originals/f4/38/42/f4384252d7be1a98b27d116e69308397.jpg",
+"https://i.pinimg.com/originals/7f/4e/77/7f4e77dbfdd04b979ad38239d02b0ce8.jpg",
+"https://i.pinimg.com/originals/65/fa/04/65fa04f58f9a102ccd36046eee3101b7.jpg",
+"https://i.pinimg.com/originals/af/4c/68/af4c685f1671e00b6c1b33fdd0f6cc96.jpg",
+]
+let reu = img[Math.floor(Math.random() * img.length)];
+const response = await axios.get(reu, { responseType: "arraybuffer" });
+const buffer = Buffer.from(response.data, "binary");
+res.set({"Content-Type": "image/jpeg", "Content-Length": buffer.length, "Cache-Control": "public, max-age=31536000"});
+res.send(buffer);
+})
 // Created by SatzzDev.
 router.get("/jadwal-sholat", async (req, res) => {
 let { kota } = req.query;
