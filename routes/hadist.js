@@ -1,5 +1,5 @@
 const axios = require('axios');
-const cheerio = require('cheerio');
+import * as cheerio from 'cheerio';
 
 
 
