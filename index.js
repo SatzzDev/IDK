@@ -5,7 +5,7 @@ import path from "path";
 import ejs from "ejs";
 import os from "os";
 import axios from "axios";
-import cheerio from "cheerio";
+import * as cheerio from 'cheerio';
 import { parseISO, formatDistanceToNow } from "date-fns";
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
