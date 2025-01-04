@@ -5,8 +5,85 @@
 <title>SatganzDevs API</title>
 <meta name="description" content="Simple REST API for downloading media from Instagram, Facebook, Twitter, Tiktok, and more"">
 <meta name="author" content="SatganzDevs">
-<link rel="icon" type="image/x-png" href="favicon.png">
+<link rel="shortcut icon" href="/favicon.ico">
 <meta property="og:image" content="./assets/avatars/face-1.jpg">
+<style>
+/* Gaya untuk latar belakang preloader */
+#preloader {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: #212529; 
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 9999;
+}
+
+.sk-cube-grid {
+width: 50px;
+height: 50px;
+margin: 100px auto;
+}
+
+.sk-cube-grid .sk-cube {
+width: 33%;
+height: 33%;
+background-color: blue;
+float: left;
+-webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
+animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out; 
+}
+.sk-cube-grid .sk-cube1 {
+-webkit-animation-delay: 0.2s;
+animation-delay: 0.2s; }
+.sk-cube-grid .sk-cube2 {
+-webkit-animation-delay: 0.3s;
+animation-delay: 0.3s; }
+.sk-cube-grid .sk-cube3 {
+-webkit-animation-delay: 0.4s;
+animation-delay: 0.4s; }
+.sk-cube-grid .sk-cube4 {
+-webkit-animation-delay: 0.1s;
+animation-delay: 0.1s; }
+.sk-cube-grid .sk-cube5 {
+-webkit-animation-delay: 0.2s;
+animation-delay: 0.2s; }
+.sk-cube-grid .sk-cube6 {
+-webkit-animation-delay: 0.3s;
+animation-delay: 0.3s; }
+.sk-cube-grid .sk-cube7 {
+-webkit-animation-delay: 0s;
+animation-delay: 0s; }
+.sk-cube-grid .sk-cube8 {
+-webkit-animation-delay: 0.1s;
+animation-delay: 0.1s; }
+.sk-cube-grid .sk-cube9 {
+-webkit-animation-delay: 0.2s;
+animation-delay: 0.2s; }
+
+@-webkit-keyframes sk-cubeGridScaleDelay {
+0%, 70%, 100% {
+-webkit-transform: scale3D(1, 1, 1);
+transform: scale3D(1, 1, 1);
+} 35% {
+-webkit-transform: scale3D(0, 0, 1);
+transform: scale3D(0, 0, 1); 
+}
+}
+
+@keyframes sk-cubeGridScaleDelay {
+0%, 70%, 100% {
+-webkit-transform: scale3D(1, 1, 1);
+transform: scale3D(1, 1, 1);
+} 35% {
+-webkit-transform: scale3D(0, 0, 1);
+transform: scale3D(0, 0, 1);
+} 
+}
+</style>
 <!-- Simple bar CSS -->
 <link rel="stylesheet" href="css/simplebar.css">
 <!-- Fonts CSS -->
@@ -28,7 +105,24 @@
 <link rel="stylesheet" href="css/app-light.css" id="lightTheme" disabled>
 <link rel="stylesheet" href="css/app-dark.css" id="darkTheme">
 </head>
-<body class="vertical  dark  ">
+<body onclick="mulaiMusik()" class="vertical  dark  ">
+
+
+<!-- Preloader -->
+<div id="preloader">
+<div class="sk-cube-grid">
+<div class="sk-cube sk-cube1"></div>
+<div class="sk-cube sk-cube2"></div>
+<div class="sk-cube sk-cube3"></div>
+<div class="sk-cube sk-cube4"></div>
+<div class="sk-cube sk-cube5"></div>
+<div class="sk-cube sk-cube6"></div>
+<div class="sk-cube sk-cube7"></div>
+<div class="sk-cube sk-cube8"></div>
+<div class="sk-cube sk-cube9"></div>
+</div>
+</div>
+
 <div class="wrapper">
 <nav class="topnav navbar navbar-light">
 <button type="button" class="navbar-toggler text-muted mt-2 p-0 mr-3 collapseSidebar">
@@ -90,26 +184,31 @@
 </a>
 <ul class="collapse list-unstyled pl-4 w-100" id="downloader">
 <li class="nav-item">
-<a class="nav-link pl-3" href="/api/ttdl"><span class="ml-1 item-text">Tiktok Downloader</span>
+<a class="nav-link pl-3" target="_blank" href="/api/ytplay?query=somebody's pleasure extended version"><span class="ml-1 item-text">Youtube Play</span>
 </a>
 </li>
 <li class="nav-item">
-<a class="nav-link pl-3" href="/api/igdl"><span class="ml-1 item-text">Instagram Downloader</span></a>
-</li>
-</ul>
-</li>
-<li class="nav-item dropdown">
-<a href="#internet" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-<i class="fa-solid fa-globe fe-16"></i>
-<span class="ml-3 item-text">Internet</span>
+<a class="nav-link pl-3" target="_blank" href="/api/yts?query=somebody's pleasure extended version"><span class="ml-1 item-text">Youtube Search</span>
 </a>
-<ul class="collapse list-unstyled pl-4 w-100" id="internet">
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/storyanime"><span class="ml-1 item-text">Story Anime</span></a>
 </li>
 <li class="nav-item">
-<a class="nav-link pl-3" href="/api/storymusic"><span class="ml-1 item-text">Story Music</span></a>
+<a class="nav-link pl-3" target="_blank" href="/api/ytmp3?url=https://youtu.be/eEssr98eFjw"><span class="ml-1 item-text">Youtube Mp3</span>
+</a>
 </li>
+<li class="nav-item">
+<a class="nav-link pl-3" target="_blank" href="/api/ytmp4?url=https://youtu.be/eEssr98eFjw"><span class="ml-1 item-text">Youtube Mp4</span>
+</a>
+</li>
+<li class="nav-item">
+<a class="nav-link pl-3" target="_blank" href="/api/transcript?url=https://youtu.be/eEssr98eFjw"><span class="ml-1 item-text">Youtube Transcript</span>
+</a>
+</li>
+<li class="nav-item">
+<a class="nav-link pl-3" target="_blank" href="/api/spotifydl"><span class="ml-1 item-text">Spotify</span>
+</a>
+</li>
+<li class="nav-item">
+<a class="nav-link pl-3" target="_blank" href="/api/igdl"><span class="ml-1 item-text">Instagram</span></a>
 </li>
 </ul>
 </li>
@@ -120,33 +219,10 @@
 </a>
 <ul class="collapse list-unstyled pl-4 w-100" id="search">
 <li class="nav-item">
-<a class="nav-link pl-3" href="/api/wallpaper"><span class="ml-1 item-text">Wallpaper</span></a>
+<a class="nav-link pl-3" target="_blank" href="/api/wallpaper?query=digital art"><span class="ml-1 item-text">Wallpaper</span></a>
 </li>
 <li class="nav-item">
-<a class="nav-link pl-3" href="/api/xnxxsearch"><span class="ml-1 item-text">xnxxsearch</span></a>
-</li>
-</ul>
-</li>
-<li class="nav-item dropdown">
-<a href="#text" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-<i class="fa-solid fa-pen-to-square"></i>
-<span class="ml-3 item-text">Random Text</span>
-</a>
-<ul class="collapse list-unstyled pl-4 w-100" id="text">
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/random/bucin"><span class="ml-1 item-text">Bucin</span></a>
-</li>
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/random/gombalan"><span class="ml-1 item-text">Gombalan</span></a>
-</li>
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/random/longtext"><span class="ml-1 item-text">Long Text</span></a>
-</li>
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/random/motivasi"><span class="ml-1 item-text">Motivasi</span></a>
-</li>
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/random/quotes"><span class="ml-1 item-text">Quotes</span></a>
+<a class="nav-link pl-3" target="_blank" href="/api/xnxxsearch?query=step mom"><span class="ml-1 item-text">xnxxsearch</span></a>
 </li>
 </ul>
 </li>
@@ -157,71 +233,16 @@
 </a>
 <ul class="collapse list-unstyled pl-4 w-100" id="islamic">
 <li class="nav-item">
-<a class="nav-link pl-3" href="/api/jadwal-sholat"><span class="ml-1 item-text">Jadwal Sholat</span></a>
+<a class="nav-link pl-3" target="_blank" href="/api/jadwal-sholat?kota=pekanbaru"><span class="ml-1 item-text">Jadwal Sholat</span></a>
 </li>
 <li class="nav-item">
-<a class="nav-link pl-3" href="/api/quran-surah"><span class="ml-1 item-text">Quran Surah</span></a>
+<a class="nav-link pl-3" target="_blank" href="/api/surah/1"><span class="ml-1 item-text" >Quran Surah</span></a>
 </li>
 <li class="nav-item">
-<a class="nav-link pl-3" href="/api/quran-ayat"><span class="ml-1 item-text">Quran Ayat</span></a>
+<a class="nav-link pl-3" target="_blank" href="/api/surah-ayat/17/32"><span class="ml-1 item-text">Quran Ayat</span></a>
 </li>
 </ul>
 </li>
-<li class="nav-item dropdown">
-<a href="#game" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-<i class="fa-solid fa-gamepad"></i>
-<span class="ml-3 item-text">Game</span>
-</a>
-<ul class="collapse list-unstyled pl-4 w-100" id="game">
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/games/asahotak"><span class="ml-1 item-text">Asah Otak</span></a>
-</li>
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/games/caklontong"><span class="ml-1 item-text">Cak Lontong</span></a>
-</li>
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/games/family100"><span class="ml-1 item-text">Family100</span></a>
-</li>
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/games/kuis"><span class="ml-1 item-text">Kuis</span></a>
-</li>
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/games/siapakahaku"><span class="ml-1 item-text">Siapakah Aku</span></a>
-</li>
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/games/susunkata"><span class="ml-1 item-text">Susun Kata</span></a>
-</li>
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/games/tebakanime"><span class="ml-1 item-text">Tebak Anime</span></a>
-</li>
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/games/tebakbendera"><span class="ml-1 item-text">Tebak Bendera</span></a>
-</li>
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/games/tebakgambar"><span class="ml-1 item-text">Tebak Gambar</span></a>
-</li>
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/games/tebakheroml"><span class="ml-1 item-text">Tebak Hero Mobile Legend</span></a>
-</li>
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/games/tebakkalimat"><span class="ml-1 item-text">Tebak Kalimat</span></a>
-</li>
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/games/tebakkata"><span class="ml-1 item-text">Tebak Kata</span></a>
-</li>
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/games/tebakkimia"><span class="ml-1 item-text">Tebak Kimia</span></a>
-</li>
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/games/tebaklagu"><span class="ml-1 item-text">Tebak Lagu</span></a>
-</li>
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/games/tebaklirik"><span class="ml-1 item-text">Tebak Lirik</span></a>
-</li>
-<li class="nav-item">
-<a class="nav-link pl-3" href="/api/games/tebaklogo"><span class="ml-1 item-text">Tebak Logo</span></a>
-</li>
-</ul>
 <li class="nav-item dropdown">
 <a href="#maker" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
 <i class="fa-solid fa-edit"></i>
@@ -229,16 +250,28 @@
 </a>
 <ul class="collapse list-unstyled pl-4 w-100" id="maker">
 <li class="nav-item">
-<a class="nav-link pl-3" href="/api/nulis"><span class="ml-1 item-text">Nulis</span></a>
+<a class="nav-link pl-3" target="_blank" href="/api/welcome?username=Satzz&groupname=Satzz&ppuser=https://i.ibb.co/1s8T3sY/48f7ce63c7aa.jpg&ppgc=https://i.ibb.co/G5mJZxs/rin.jpg&member=1000"><span class="ml-1 item-text">Welcome</span></a>
 </li>
 <li class="nav-item">
-<a class="nav-link pl-3" href="/api/welcome"><span class="ml-1 item-text">Welcome</span></a>
+<a class="nav-link pl-3" target="_blank" href="/api/goodbye?username=Satzz&groupname=Satzz&ppuser=https://i.ibb.co/1s8T3sY/48f7ce63c7aa.jpg&ppgc=https://i.ibb.co/G5mJZxs/rin.jpg&member=1000"><span class="ml-1 item-text">Goodbye</span></a>
 </li>
 <li class="nav-item">
-<a class="nav-link pl-3" href="/api/goodbye"><span class="ml-1 item-text">Goodbye</span></a>
+<a class="nav-link pl-3" target="_blank" href="/api/gura?text=SatzzDev"><span class="ml-1 item-text">Gura</span></a>
 </li>
 <li class="nav-item">
-<a class="nav-link pl-3" href="/api/gura"><span class="ml-1 item-text">Gura</span></a>
+<a class="nav-link pl-3" target="_blank" href="/api/gfx1?text=SatzzDev"><span class="ml-1 item-text">Gfx1</span></a>
+</li>
+<li class="nav-item">
+<a class="nav-link pl-3" target="_blank" href="/api/gfx2?text=SatzzDev"><span class="ml-1 item-text">Gfx2</span></a>
+</li>
+<li class="nav-item">
+<a class="nav-link pl-3" target="_blank" href="/api/gfx3?text1=Satzz&text2=Dev"><span class="ml-1 item-text">Gfx3</span></a>
+</li>
+<li class="nav-item">
+</li>
+<a class="nav-link pl-3" target="_blank" href="/api/gfx4?text1=Satzz&text2=Dev"><span class="ml-1 item-text">Gfx4</span></a>
+<li class="nav-item">
+<a class="nav-link pl-3" target="_blank" href="/api/gfx4?text=SatzzDev"><span class="ml-1 item-text">Gfx5</span></a>
 </li>
 </ul>
 </li>
@@ -249,7 +282,7 @@
 </a>
 <ul class="collapse list-unstyled pl-4 w-100" id="news">
 <li class="nav-item">
-<a class="nav-link pl-3" href="/api/pitutur"><span class="ml-1 item-text">Pitutur.id</span></a>
+<a class="nav-link pl-3" target="_blank" href="/api/pitutur"><span class="ml-1 item-text">Pitutur.id</span></a>
 </li>
 </ul>
 </li>
@@ -260,7 +293,7 @@
 </p>
 <ul class="navbar-nav flex-fill w-100 mb-2">
 <li class="nav-item w-100">
-<a class="nav-link" href="https://instagram.com/kurniawan_satria__">
+<a class="nav-link" target="_blank" href="https://instagram.com/kurniawan_satria__">
 <i class="fa-brands fa-instagram"></i>
 <span class="ml-3 item-text">Instagram</span>
 </a>
@@ -268,7 +301,7 @@
 </ul>
 <ul class="navbar-nav flex-fill w-100 mb-2">
 <li class="nav-item w-100">
-<a class="nav-link" href="https://github.com/SatganzDevs">
+<a class="nav-link" target="_blank" href="https://github.com/SatganzDevs">
 <i class="fa-brands fa-github"></i>
 <span class="ml-3 item-text">Github</span>
 </a>
@@ -287,7 +320,7 @@
 <div class="col-12">
 <div class="row align-items-center mb-2">
 <div class="col">
-<h2 class="h5 page-title">Welcome!</h2>
+<h2 class="h5 page-title">Welcome To</h2>
 </div>
 <div class="col-auto">
 <form class="form-inline">
@@ -305,7 +338,7 @@
 <div class="card-body">
 <div class="row mt-1 align-items-center">
 <div class="col-12 col-lg-4 text-left pl-4">
-<p class="mb-1 small text-muted">SatganzDevs API</p>
+<span id="typed" class="mb-1 h5"></span>
 </div>
 </div>
 <div class="row mt-1 align-items-center">
@@ -313,68 +346,8 @@
 <p class="text-muted">This API is currently under development. If you encounter any bugs or errors, please don't hesitate to contact us. Your feedback is valuable for improving the service.</p>
 </div>
 </div>
-</div> <!-- .card-body -->
-</div> <!-- .card -->
-</div> <!-- .mb-2 -->
-<div class="col-md-12 mb-4">
-<div class="card profile shadow">
-<div class="card-footer d-flex justify-content-between align-items-center">
-<a class="avatar avatar-xl">
-<img src="./assets/images/CD.png" alt="..." class="avatar-img rounded-circle" id="albumArt">
-</a>
-<div class="track-name-container">
-<p class="text-muted track-name" id="trackName">Loading...</p>
-</div>
-<div>
-<a class="btn btn-outline-secondary mr-2" href="#audio" id="audioSwitcher">
-<span class="fe fe-play fe-16" id="audio-icon"></span>
-</a>
-<a class="btn btn-outline-secondary" data-toggle="modal" data-target="#audioListModal">
-<span class="fe fe-list fe-16 text-muted"></span>
-</a>
-</div>
-</div> <!-- / .card-footer -->
-</div> <!-- / .card -->
-</div> <!-- .row-->
-
-<!-- Audio List Modal -->
-<div class="modal fade show" id="audioListModal" tabindex="-1" role="dialog" aria-labelledby="audioListModalLabel" aria-hidden="true">
-<div class="modal-dialog modal-lg" role="document">
-<div class="modal-content">
-<div class="modal-header">
-<h5 class="modal-title" id="audioListModalLabel">Audio List</h5>
-<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-<span aria-hidden="true">&times;</span>
-</button>
-</div>
-<div class="modal-body">
-<ul class="nav nav-tabs" id="audioCategoryTabs" role="tablist">
-<li class="nav-item">
-<a class="nav-link active" id="dj-tab" data-toggle="tab" href="#dj" role="tab" aria-controls="dj" aria-selected="true">DJ</a>
-</li>
-<li class="nav-item">
-<a class="nav-link" id="drop-tab" data-toggle="tab" href="#drop" role="tab" aria-controls="drop" aria-selected="false">DROP</a>
-</li>
-<li class="nav-item">
-<a class="nav-link" id="sad-tab" data-toggle="tab" href="#sad" role="tab" aria-controls="sad" aria-selected="false">SAD</a>
-</li>
-</ul>
-<div class="tab-content" id="audioCategoryTabsContent">
-<div class="tab-pane fade show active" id="dj" role="tabpanel" aria-labelledby="dj-tab">
-<ul class="list-group list-group-flush" id="dj-list"></ul>
-</div>
-<div class="tab-pane fade" id="drop" role="tabpanel" aria-labelledby="drop-tab">
-<ul class="list-group list-group-flush" id="drop-list"></ul>
-</div>
-<div class="tab-pane fade" id="sad" role="tabpanel" aria-labelledby="sad-tab">
-<ul class="list-group list-group-flush" id="sad-list"></ul>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
+</div> 
+<audio id='musiknya' src="assets/juicy-luicy-tampar-official-music-video-128-ytshorts.savetube.me.mp3" style="display:none" loop></audio>
 <!-- .row-->
 </div> <!-- .col-12 -->
 </div> <!-- .row -->
@@ -395,155 +368,30 @@
 <script src="js/datamaps.all.min.js"></script>
 <script src="js/datamaps-zoomto.js"></script>
 <script src="js/datamaps.custom.js"></script>
-<script src="js/Chart.min.js"></script>
+<script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
 <script>
-/* defind global options */
-Chart.defaults.global.defaultFontFamily = base.defaultFontFamily;
-Chart.defaults.global.defaultFontColor = colors.mutedColor;
-</script>
-<script>
-$(document).ready(() => {
-let list = [
-{
-category:'DROP',
-url:'https://github.com/SatzzDev/Database/raw/main/AMPUN%20DJ/sound%20drop%20enakeun%20v2%20speed%20up%20elite%20cees%F0%9F%94%A5.mp3',
-},
-{
-category:'DROP',
-url:'https://github.com/SatzzDev/Database/raw/main/AMPUN%20DJ/DJ%20RAIN%20MAN%20%E2%9A%A1%F0%9F%8C%A7%EF%B8%8F%20__%20SPEED%20UP%20KECE%F0%9F%98%B0%F0%9F%98%B0.mp3',
-},
-{
-category:'DROP',
-url:'https://github.com/SatzzDev/Database/raw/main/AMPUN%20DJ/DROP%20ENAKEUN%20V7%20__%20By%20_%20itsmeraley%20__%20Sped%20Up%20Reverb.mp3',
-},
-{
-category:'DROP',
-url:'https://github.com/SatzzDev/Database/raw/main/AMPUN%20DJ/DROP%20ENAKEUN%20V5%20__%20By%20_%20itsmeraley%20__%20SPED%20UP%20REVERB%E2%98%A0%EF%B8%8F.mp3',
-},
-{
-category:'DJ',
-url:'https://github.com/SatzzDev/Database/raw/main/AMPUN%20DJ/ANAK%20KAMPUNG%20-%202023%20%5B%20RIZKY%20MUTAHARI%20X%20DJ%20AYYA%20%5DREQ%20ZULL.mp3',
-},
-{
-category:'DJ',
-url:'https://github.com/SatzzDev/Database/raw/main/AMPUN%20DJ/BERJUANG%20SAMPAI%20MATI%20SUPER%20EXC%20%5B%20Donny%20Fernanda%20x%20SANDI%20KAWEK%20%5D%20ANTONIUSTAN.mp3',
-},
-{
-category:'DJ',
-url:'https://github.com/SatzzDev/Database/raw/main/AMPUN%20DJ/DJ%20MINANG%20VIRAL%20LAPIAK%20BURUAK%20PONDOK%20TUO--45a9e556e5f801f9fca6fb0f7097fff3mp3.mp3',
-},
-{
-category:'DJ',
-url:'https://github.com/SatzzDev/Database/raw/main/AMPUN%20DJ/ORANG%20YANG%20SALAH%20SUPER%20EXC%20%5B%20Donny%20Fernanda%20x%20DJ%20LUTHFI%20AP%20x%20DJ%20AYYA%20%5D%20%20ANTONIUSTAN.mp3',
-},
-{
-category:'DJ',
-url:'https://github.com/SatzzDev/Database/raw/main/AMPUN%20DJ/TARAGAK%20PULANG%20-%202024%20%5B%20RIZKY%20MUTAHARI%20X%20DJ%20AYYA%20%5DREQ%20CINDERELLA2KD.mp3'
-},
-{
-category:'SAD',
-url: "https://github.com/SatzzDev/Database/raw/main/UPLOAD%20WITH%20NODEJS/car's%20outside%20x%20train%20wreck.mp3"
-},
-{
-category:'SAD',
-url: 'https://github.com/SatzzDev/Database/raw/main/UPLOAD%20WITH%20NODEJS/masih%20cinta%20speed%20up.mp3'
-}
-];
-
-let audio = new Audio();
-const audioSwitcher = document.getElementById("audioSwitcher");
-const audioIcon = document.getElementById("audio-icon");
-const trackName = document.getElementById("trackName");
-const albumArt = document.getElementById("albumArt");
-
-const getTrackName = (url) => {
-return decodeURIComponent(url.substring(url.lastIndexOf('/') + 1).replace(/\%20/g, ' '));
-};
-
-const updateTrackName = () => {
-const name = getTrackName(audio.src);
-trackName.innerHTML = `${name}`;
-if ('mediaSession' in navigator) {
+var typed = new Typed('#typed', {
+strings: ['SatzzDev Api\'s'],
+loop:true,
+typeSpeed: 50,
+backSpeed: 50,
+smartBackspace: true,
+});
+function mulaiMusik() {
+document.getElementById("musiknya").play()
 navigator.mediaSession.metadata = new MediaMetadata({
 title: name,
 artist: 'SatzzDev.',
 album: 'RESTAPI',
 artwork: [
-{ src: albumArt.src, sizes: '512x512', type: 'image/jpeg' }
+{ src: '/assets/avatars/face-1.jpg', sizes: '512x512', type: 'image/jpeg' }
 ]
 });
 }
-};
-
-const toggleAudio = async () => {
-if (audio.paused) {
-audioIcon.classList.remove("fe-play");
-audioIcon.classList.add("fe-loader");
-try {
-await audio.play();
-audioIcon.classList.remove("fe-loader");
-audioIcon.classList.add("fe-pause");
-trackName.classList.add('marquee'); 
-albumArt.classList.add('rotating'); 
-updateTrackName(); 
-} catch (error) {
-console.error('Error playing audio:', error);
-}
-} else {
-audioIcon.classList.remove("fe-pause");
-audioIcon.classList.add("fe-loader");
-await audio.pause();
-audioIcon.classList.remove("fe-loader");
-audioIcon.classList.add("fe-play");
-trackName.classList.remove('marquee'); 
-albumArt.classList.remove('rotating'); 
-}
-};
-
-const changeAudio = async (url) => {
-if (!audio.paused) {
-await audio.pause();  
-}
-audio.currentTime = 0; 
-audio.src = url; 
-toggleAudio(); 
-updateTrackName(); 
-};
-
-audioSwitcher.addEventListener("click", () => {
-toggleAudio();
+window.addEventListener('load', () => {
+document.getElementById('preloader').style.display = "none";
+document.getElementById("musiknya").load()
 });
-
-audio.addEventListener("ended", () => {
-const nextAudio = list[Math.floor(Math.random() * list.length)];
-changeAudio(nextAudio.url);
-});
-
-const djList = document.getElementById('dj-list');
-const dropList = document.getElementById('drop-list');
-const sadList = document.getElementById('sad-list');
-
-list.forEach((item) => {
-const li = document.createElement('li');
-li.className = 'list-group-item';
-li.innerHTML = `<a class="text-muted" href='#'>${getTrackName(item.url)}</a>`;
-li.onclick = () => {
-changeAudio(item.url);
-$('#audioListModal').modal('hide');
-};
-
-if (item.category === 'DJ') {
-djList.appendChild(li);
-} else if (item.category === 'DROP') {
-dropList.appendChild(li);
-} else if (item.category === 'SAD') {
-sadList.appendChild(li);
-}
-});
-
-const initialAudio = list[Math.floor(Math.random() * list.length)];
-changeAudio(initialAudio.url);
-
 
 $("#fullScreenSwitcher").on("click", async() => {
 let elem = document.documentElement; 
@@ -583,7 +431,7 @@ $("#fullscreen-icon").removeClass("fe-minimize").addClass("fe-maximize");
 $("#fullscreen-icon").removeClass("fe-maximize").addClass("fe-minimize");
 }
 });
-});
+
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js"></script>
 <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>

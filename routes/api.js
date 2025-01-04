@@ -308,18 +308,11 @@ res.json(r)
 
 
 
-router.get("/quran-surah", async (req, res) => {
-let { nomor } = req.query;
-if (!nomor)
-return res.json({
-status: false,
-creator: "SatganzDevs",
-message: "Masukkan parameter nomor surah, cth: ?nomor=1",
-});
-let riss = await fetchJson(
-`https://raw.githubusercontent.com/SatzzDev/API/master/data/quranaudio.json`,
-);
-let data = riss.filter((item) => item.number === parseInt(nomor));
+router.get("/surah/:surah", async (req, res) => {
+let { surah } = req.params;
+if (!surah) return res.json({ status: false, creator: "SatzzDev", message: "Parameter 'surah' surah diperlukan. Contoh: /surah/17" });
+let riss = await fetchJson(`https://raw.githubusercontent.com/Jabalsurya2105/Database/master/data/quranaudio.json`);
+let data = riss.filter((item) => item.number === parseInt(surah));
 res.json({
 status: true,
 creator: "SatzzDev",
@@ -331,17 +324,17 @@ data,
 
 
 
-router.get("/quran-ayat", async (req, res) => {
-let { surah, ayat } = req.query;
+router.get("/surah-ayat/:surah/:ayat", async (req, res) => {
+let { surah, ayat } = req.params;
 if (!surah || !ayat)
 return res.json({
 status: false,
 creator: "SatganzDevs",
 message:
-"Masukkan parameter nomor surah dan ayat, cth: ?surah=17&ayat=32",
+"Masukkan parameter nomor surah dan ayat, cth: /17/32",
 });
 let riss = await fetchJson(
-`https://raw.githubusercontent.com/SatzzDev/API/master/surah/surah%20${parseInt(surah)}.json`,
+`https://raw.githubusercontent.com/Jabalsurya2105/database/master/surah/surah%20${parseInt(surah)}.json`,
 );
 let data = riss.ayat.filter((item) => item.no === parseInt(ayat));
 res.json({
