@@ -1,6 +1,6 @@
 import axios from 'axios';
 import qs from 'querystring';
-import cheerio from "cheerio";
+import * as cheerio from 'cheerio';
 import FormData from 'form-data';
 import yts from "yt-search";
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
