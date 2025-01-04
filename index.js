@@ -81,10 +81,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 //━━━━━━━━━━━━━━━[ Routes ]━━━━━━━━━━━━━━━━━//
 app.get("/", async(req, res) => {
-const response = await axios.get('https://api.github.com/repos/KurniawanSatria/IDK',{headers: {'Authorization': `Bearer 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`}})
-const lastUpdateISO = response.data.updated_at;
-const lastUpdate = lastUpdateISO ? formatDistanceToNow(parseISO(lastUpdateISO), { addSuffix: true }) : "Unknown";
-res.render('index', {total_request: requestCount, feature_list: getFeatureList(req).length, uptime: formatUptime(process.uptime()), last_update: lastUpdate.split("about ")[1]});
+res.render('index', { total_request: requestCount, feature_list: getFeatureList(req).length, uptime: formatUptime(process.uptime()) });
 });
 
 
