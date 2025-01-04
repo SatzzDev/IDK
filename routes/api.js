@@ -3,7 +3,7 @@ import cors from 'cors';
 import secure from 'ssl-express-www';
 import path from 'path';
 import axios from 'axios';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import { ytmp3, ytmp4, transcript, spotifydl, search, SatzzDev } from '../routes/scrape.js'
