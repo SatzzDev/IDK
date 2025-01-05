@@ -6,8 +6,9 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
-import { ytmp3, ytmp4, transcript, spotifydl, search, SatzzDev } from '../routes/scrape.js'
-import {Welcome, Welcome2, Welcome3, Goodbye, Goodbye2, Goodbye3, Gura, Gfx1, Gfx2, Gfx3, Gfx4, Gfx5 } from '@lyncx/canvas'
+import { ytmp3, ytmp4, transcript, spotifydl, search, SatzzDev } from '../routes/scrape.js';
+import {selfReminder, profile} from '../routes/canvas.js';
+import {Welcome, Goodbye,  Gura, Gfx1, Gfx2, Gfx3, Gfx4, Gfx5 } from '@lyncx/canvas'
 
 
 
@@ -206,7 +207,31 @@ res.status(500).send({ status: 500, message: "Internal Server Error", error: err
 });
 
 
+router.get("/self-reminder", async (req, res) => {
+try {
+let {text} = req.query;
+if (!text) return res.status(400).send({ status: 400, message: "Masukkan parameter text" });
+const buffer = await selfReminder(text);
+res.set({ "Content-Type": "image/png", "Content-Length": buffer.length });
+res.send(buffer);
+} catch (error) {
+console.error("Error:", error);
+res.status(500).send({ status: 500, message: "Internal Server Error", error: error.message });
+}
+});
 
+router.get("/profile", async (req, res) => {
+try {
+let {username, avatar, isPremium} = req.query;
+if (!username || !avatar || !isPremium) return res.status(400).send({status: 400, message: "Masukkan parameter username avatar dan isPremium, contoh : ?username=username&avatar=avatar&isPremium=true"});
+const buffer = await profile(username, avatar, isPremium === 'true');
+res.set({"Content-Type": "image/png", "Content-Length": buffer.length});
+res.send(buffer);
+} catch (error) {
+console.error("Error:", error);
+res.status(500).send({status: 500, message: "Internal Server Error", error: error.message});
+}
+});
 
 
 router.get("/thmb", async(req,res) => {
