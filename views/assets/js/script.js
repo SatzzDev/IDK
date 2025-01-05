@@ -2,7 +2,7 @@ window.addEventListener('load', async() => {
 document.getElementById('preloader').style.display = "none";
 })
 navigator.mediaSession.metadata = new MediaMetadata({
-title: 'Sepenuh Hati X Sampai Akhir',
+title: 'Rest Api',
 artist: 'SatzzDev',
 album: 'SatzzDev',
 artwork: [
