@@ -9,7 +9,7 @@ import fs from 'fs';
 import { ytmp3, ytmp4, transcript, spotifydl, search, SatzzDev } from '../routes/scrape.js';
 import {selfReminder, profile} from '../routes/canvas.js';
 import {Welcome, Goodbye,  Gura, Gfx1, Gfx2, Gfx3, Gfx4, Gfx5 } from '@lyncx/canvas'
-
+import yts from 'yt-search';
 
 
 
@@ -284,6 +284,13 @@ res.json(r)
 })
 
 
+
+router.get("/ytlist", async(req, res) => {
+var { list } = req.query;
+if (!list) return res.json({ status : false, creator : `SatzzDev`, message: 'missing parameter list.'})
+let r = await yts( { listId: list } )
+res.json(r)
+})
 
 
 
