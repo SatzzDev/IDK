@@ -16,7 +16,7 @@ const app = express();
 //━━━━━━━━━━━━━━━[ Helper Functions ]━━━━━━━━━━━━━━━━━//
 const getFeatureList = (req) => {
 const routes = [];
-const extractRoutes = (stack, basePath = '') => {
+const extractRoutes = (stack, basePath = '/api') => {
 stack.forEach((middleware) => {
 if (middleware.route) {
 routes.push(`${req.protocol}://${req.get('host')}${basePath}${middleware.route.path}`);
