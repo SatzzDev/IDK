@@ -1,5 +1,6 @@
 {pkgs}: {
 deps = [
+  pkgs.unzip
   pkgs.nodePackages.prettier
 pkgs.nodejs_latest
 pkgs.libuuid

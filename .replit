@@ -1,8 +1,12 @@
 run = "npm run dev"
+modules = ["nodejs-20", "nix", "web"]
 
 [deployment]
 run = ["sh", "-c", "npm run dev"]
 
+[nix]
+channel = "stable-24_05"
+
 [[ports]]
-localPort = 4000
+localPort = 80
 externalPort = 80

@@ -36,16 +36,24 @@ let hours = Math.floor((uptime / 3600) % 24);
 let days = Math.floor(uptime / 86400);
 
 if (days > 0) {
-  return `${days}d ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  return {
+    days:`${days}d`,
+    hours: hours.toString(), 
+    minutes: minutes.toString(), 
+    seconds: seconds.toString()
+    }
 }
-return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+return {
+hours: hours.toString(), 
+minutes: minutes.toString(), 
+seconds: seconds.toString()
+}
 }
 
 //━━━━━━━━━━━━━━━[ App Configuration ]━━━━━━━━━━━━━━━━━//
-app.set("port", process.env.PORT || 4000);
+app.set("port", process.env.PORT || 80);
 app.get("/uptime", (req, res) => {
-res.json({
-uptime: formatUptime(process.uptime())})  
+res.json(formatUptime(process.uptime()))
 })
 let requestCount = 100;
 app.use((req, res, next) => {
@@ -81,7 +89,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 //━━━━━━━━━━━━━━━[ Routes ]━━━━━━━━━━━━━━━━━//
 app.get("/", async(req, res) => {
-res.render('index', { total_request: requestCount, feature_list: getFeatureList(req).length, uptime: formatUptime(process.uptime()) });
+res.render('index', { total_request: requestCount, feature_list: getFeatureList(req).length});
 });
 
 

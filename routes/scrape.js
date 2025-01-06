@@ -98,7 +98,7 @@ let data = await yts(teks);
 return {
 status: true,
 creator: "@krniwnstria",
-results: data.all
+results: data.all.filter(res => res.type == "video")
 };
 } catch (error) {
 return {
