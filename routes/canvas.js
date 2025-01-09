@@ -90,8 +90,8 @@ const ctx = canvas.getContext('2d');
 ctx.fillStyle = '#1D1D1D';
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 // Colors
-const borderColor = isOwner ? '#FFD700' : isPremium ? '#FFC107' : '#C0C0C0';
-const buttonColor = isOwner ? '#FFD700' : isPremium ? '#FFC107' : '#C0C0C0';
+const borderColor = isOwner ? '#FFC107' : isPremium ? '#FFC107' : '#C0C0C0';
+const buttonColor = isOwner ? '#FFC107' : isPremium ? '#FFC107' : '#C0C0C0';
 const textColor = isOwner || isPremium ? '#000000' : '#FFFFFF';
 // Crown for Owner
 if (isOwner) {
