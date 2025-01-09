@@ -7,7 +7,7 @@ import * as cheerio from 'cheerio';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import { ytmp3, ytmp4, transcript, spotifydl, search, SatzzDev } from '../routes/scrape.js';
-import {selfReminder, profile} from '../routes/canvas.js';
+import {selfReminder, profile, versus} from '../routes/canvas.js';
 import {Welcome, Goodbye,  Gura, Gfx1, Gfx2, Gfx3, Gfx4, Gfx5 } from '@lyncx/canvas'
 import yts from 'yt-search';
 
@@ -222,9 +222,22 @@ res.status(500).send({ status: 500, message: "Internal Server Error", error: err
 
 router.get("/profile", async (req, res) => {
 try {
-let {username, avatar, isPremium} = req.query;
-if (!username || !avatar || !isPremium) return res.status(400).send({status: 400, message: "Masukkan parameter username avatar dan isPremium, contoh : ?username=username&avatar=avatar&isPremium=true"});
-const buffer = await profile(username, avatar, isPremium === 'true');
+let {username, avatar, isPremium, isOwner} = req.query;
+if (!username || !avatar || !isPremium || !isOwner) return res.status(400).send({status: 400, message: "Masukkan parameter username, avatar, isPremium dan isOwner. contoh : ?username=username&avatar=avatar&isPremium=true&isOwner=true"});
+const buffer = await profile(username, avatar, isPremium === 'true', isOwner === 'true');
+res.set({"Content-Type": "image/png", "Content-Length": buffer.length});
+res.send(buffer);
+} catch (error) {
+console.error("Error:", error);
+res.status(500).send({status: 500, message: "Internal Server Error", error: error.message});
+}
+});
+
+router.get("/bewan", async (req, res) => {
+try {
+let {player1, player2, avatar1, avatar2} = req.query;
+if (!player1 || !player2 || !avatar1 || !avatar2) return res.status(400).send({status: 400, message: "Masukkan parameter player1, player2, avatar1 dan avatar2. contoh : ?player1=Udin&player2=Asep&avatar1=&avatar2="});
+const buffer = await versus(player1, player2, avatar1, avatar2);
 res.set({"Content-Type": "image/png", "Content-Length": buffer.length});
 res.send(buffer);
 } catch (error) {
