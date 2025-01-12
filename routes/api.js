@@ -354,7 +354,7 @@ res.json(r)
 router.get("/spotifydl", async(req, res) => {
 var { url } = req.query;
 if (!url) return res.json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
-let r = await ytmp4(url)
+let r = await spotifydl(url)
 res.json(r)
 })
 
