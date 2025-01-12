@@ -247,8 +247,8 @@ res.status(500).send({status: 500, message: "Internal Server Error", error: erro
 });
 
 
-router.get("/thmb", async(req,res) => {
-let img = [
+router.get("/thmb", async (req, res) => {
+const img = [
 "https://i.pinimg.com/originals/8e/a6/27/8ea62747934dd13912a9027b37219907.jpg",
 "https://i.pinimg.com/originals/ae/7e/3b/ae7e3bada352578068f2048283838941.jpg",
 "https://i.pinimg.com/originals/c7/e9/ae/c7e9ae21404e5cc87ceccb591572de26.jpg",
@@ -259,13 +259,23 @@ let img = [
 "https://i.pinimg.com/originals/af/4c/68/af4c685f1671e00b6c1b33fdd0f6cc96.jpg",
 "https://i.pinimg.com/originals/25/a7/fc/25a7fc44f70c2bac07bcb014e952f654.jpg",
 "https://i.pinimg.com/originals/d1/e1/8b/d1e18bb7e886fb399b04cb50c99aa4f2.jpg",
-]
-let reu = img[Math.floor(Math.random() * img.length)];
-const response = await axios.get(reu, { responseType: "arraybuffer" });
+];
+const randomImgUrl = img[Math.floor(Math.random() * img.length)];
+
+try {
+const response = await axios.get(randomImgUrl, { responseType: "arraybuffer" });
 const buffer = Buffer.from(response.data, "binary");
-res.set({"Content-Type": "image/png", "Content-Length": buffer.length});
+
+res.set({
+"Content-Type": "image/jpeg", 
+"Content-Length": buffer.length
+});
 res.send(buffer);
-})
+} catch (error) {
+console.error("Error fetching image:", error);
+res.status(500).send("Failed to load image.");
+}
+});
 
 
 
