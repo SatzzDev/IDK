@@ -115,12 +115,12 @@ async function savetube(link, quality, value) {
 try {
 const headers = {
 accept: '*/*',
-referer: 'https://ytshorts.savetube.me/',
-origin: 'https://ytshorts.savetube.me/',
+referer: 'https://yt.savetube.me/',
+origin: 'https://yt.savetube.me/',
 'user-agent': 'Postify/1.0.0',
 'Content-Type': 'application/json'
 };
-const cdnNumber = 54
+const cdnNumber = 51
 const cdnUrl = `cdn${cdnNumber}.savetube.su`;
 const videoInfoResponse = await axios.post(
 `https://${cdnUrl}/info`, {
