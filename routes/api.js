@@ -361,6 +361,23 @@ res.json(r)
 
 
 
+router.get("/removebg", async(req, res) => {
+var { url } = req.query;
+if (!url) return res.json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
+let r = await removebg(url)
+res.json(r)
+})
+
+
+router.get("/upscaler", async(req, res) => {
+var { url } = req.query;
+if (!url) return res.json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
+let r = await upscaler(url)
+res.json(r)
+})
+
+
+
 
 
 router.get("/surah/:surah", async (req, res) => {
