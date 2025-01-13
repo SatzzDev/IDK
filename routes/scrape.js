@@ -379,71 +379,145 @@ message: error.message
 
 
 const retatube = {
-  getPrefix: async () => {
-    try {
-      const { data } = await axios.get('https://retatube.com/api/v1/aio/index?s=retatube.com', {
-        headers: { 'User-Agent': 'Postify/1.0.0' }
-      });
-      const prefix = cheerio.load(data)('input[name="prefix"]').val();
-      if (!prefix) throw new Error('Waduh, prefix nya kagak ada nih bree.. Input manual aja yak Prefix nya');
-      return prefix;
-    } catch (error) {
-      console.error(error.message);
-      throw error;
-    }
-  },
+getPrefix: async () => {
+try {
+const { data } = await axios.get('https://retatube.com/api/v1/aio/index?s=retatube.com', {
+headers: { 'User-Agent': 'Postify/1.0.0' }
+});
+const prefix = cheerio.load(data)('input[name="prefix"]').val();
+if (!prefix) throw new Error('Waduh, prefix nya kagak ada nih bree.. Input manual aja yak Prefix nya');
+return prefix;
+} catch (error) {
+console.error(error.message);
+throw error;
+}
+},
 
-  request: async (prefix, vidLink) => {
-    try {
-      const p = new URLSearchParams({ prefix, vid: vidLink }).toString();
-      const { data } = await axios.post('https://retatube.com/api/v1/aio/search', p, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'User-Agent': 'Postify/1.0.0',
-        }
-      });
+request: async (prefix, vidLink) => {
+try {
+const p = new URLSearchParams({ prefix, vid: vidLink }).toString();
+const { data } = await axios.post('https://retatube.com/api/v1/aio/search', p, {
+headers: {
+'Content-Type': 'application/x-www-form-urlencoded',
+'User-Agent': 'Postify/1.0.0',
+}
+});
 
-      const ext = (regex) => (data.match(regex) || [])[1] || '';
-      const fans = ext(/<p><strong>Fans：<\/strong>(\d+)/);
-      const views = ext(/<p><strong>Views:：<\/strong>(\d+)/);
-      const shares = ext(/<p><strong>Shares：<\/strong>(\d+)/);
+const ext = (regex) => (data.match(regex) || [])[1] || '';
+const fans = ext(/<p><strong>Fans：<\/strong>(\d+)/);
+const views = ext(/<p><strong>Views:：<\/strong>(\d+)/);
+const shares = ext(/<p><strong>Shares：<\/strong>(\d+)/);
 
-      const $ = cheerio.load(data);
-      const ex = $('div.icon-box').map((_, element) => {
-        const title = $(element).find('strong:contains("Title")').text().replace('Title：', '').trim();
-        const owner = $(element).find('strong:contains("Owner")').parent().text().replace('Owner：', '').trim();
-        const image = $(element).find('img').attr('src');
+const $ = cheerio.load(data);
+const ex = $('div.icon-box').map((_, element) => {
+const title = $(element).find('strong:contains("Title")').text().replace('Title：', '').trim();
+const owner = $(element).find('strong:contains("Owner")').parent().text().replace('Owner：', '').trim();
+const image = $(element).find('img').attr('src');
 
-        const dlink = $('a.button.primary.expand')
-          .map((_, el) => {
-            const link = $(el).attr('href');
-            if (link === 'javascript:void(0);') return null;
-            const teks = $(el).find('span').text().replace('Download', '').trim().toLowerCase()
-              .replace(/[\(\)]/g, '').replace(/\s+/g, '_')
-              .split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-            return { title: teks, link };
-          })
-          .get()
-          .filter(Boolean);
+const dlink = $('a.button.primary.expand')
+.map((_, el) => {
+  const link = $(el).attr('href');
+  if (link === 'javascript:void(0);') return null;
+  const teks = $(el).find('span').text().replace('Download', '').trim().toLowerCase()
+    .replace(/[\(\)]/g, '').replace(/\s+/g, '_')
+    .split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  return { title: teks, link };
+})
+.get()
+.filter(Boolean);
 
-        return { title, owner, fans, views, shares, image, dlink };
-      }).get();
+return { title, owner, fans, views, shares, image, dlink };
+}).get();
 
-      return ex;
-    } catch (error) {
-      console.error(error.message);
-      throw error;
-    }
-  },
+return ex;
+} catch (error) {
+console.error(error.message);
+throw error;
+}
+},
 
-  scrape: async (vidLink) => {
-    try {
-      const prefix = await retatube.getPrefix();
-      return await retatube.request(prefix, vidLink);
-    } catch (error) {
-      console.error(error.message);
-      throw error;
-    }
-  }
+scrape: async (vidLink) => {
+try {
+const prefix = await retatube.getPrefix();
+return await retatube.request(prefix, vidLink);
+} catch (error) {
+console.error(error.message);
+throw error;
+}
+}
 };
+
+
+
+const headers = {
+'Accept': '*/*',
+'Accept-Encoding': 'gzip, deflate, br',
+'Accept-Language': 'en-US,en;q=0.9',
+'Content-Type': 'application/json',
+'Cookie': process.env.cookie || '_gcl_au=1.1.1434388857.1736768380; _ga=GA1.1.1288278218.1736769601; __gads=ID=f659fc222cc3140b:T=1736768380:RT=1736770569:S=ALNI_MYxWLtbELZawVm8H7qk1ACYJ3joWQ; __gpi=UID=00000fe820983f49:T=1736768380:RT=1736770569:S=ALNI_MbBpHh8VY45mEOf_M3GTsorW6DSWA; __eoi=ID=4a09e7f5f5e25081:T=1736768380:RT=1736770569:S=AA-AfjbNvxDyXNorsJeb-DTwLzD3; _ga_46LKPKHGCC=GS1.1.1736769600.1.1.1736770720.0.0.0; FCNEC=%5B%5B%22AKsRol9Os6fmiihqC4te9PHxKYI9XQYjKVqjRQZIFeW-ezmUHRBB9krquFU-1nAYA1vkLy5g00668ugEvokgS1162JTxB78BozI-KYvU9ZtTy9eT7BvR6_nHmqG4n0OT3En22PhptypeCGE1AsGxfm7DhJQjYqUeUA%3D%3D%22%5D%5D',
+'Origin': 'https://pxpic.com',
+'Referer': 'https://pxpic.com/task?taskId=46ddb6ae-638c-4b66-b9fc-c2388123042c',
+'Sec-Ch-Ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+'Sec-Ch-Ua-Mobile': '?0',
+'Sec-Ch-Ua-Platform': '"Windows"',
+'Sec-Fetch-Dest': 'empty',
+'Sec-Fetch-Mode': 'cors',
+'Sec-Fetch-Site': 'same-origin',
+'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36'
+}
+
+export const removebg = async (imageUrl) => {
+try {
+const { data } = await axios.post('https://pxpic.com/callAiFunction', {
+imageUrl: imageUrl,
+targetFormat: "png",
+fileOriginalExtension: "jpeg",
+needCompress: "no",
+imageQuality: "100",
+compressLevel: "6",
+aiFunction: "removebg",
+upscalingLevel: ""
+}, { headers });
+return {
+status: true,
+creator: "@krniwnstria",
+result: data.resultImageUrl
+};
+} catch (error) {
+return {
+status: false,
+creator: "@krniwnstria",
+message: error.message
+};
+}
+}
+export const upscaler = async (imageUrl) => {
+try {
+const { data } = await axios.post('https://pxpic.com/callAiFunction', {
+imageUrl: imageUrl,
+targetFormat: "png",
+fileOriginalExtension: "jpeg",
+needCompress: "no",
+imageQuality: "100",
+compressLevel: "6",
+aiFunction: "upscale",
+upscalingLevel: "4"
+}, { headers });
+return {
+status: true,
+creator: "@krniwnstria",
+result: data.resultImageUrl
+};
+} catch (error) {
+return {
+status: false,
+creator: "@krniwnstria",
+message: error.message
+};
+}
+}
+
+
+
+
 //━━━━━━━━━━━━━━━[ END OF DOWNLOADER ]━━━━━━━━━━━━━━━━━//
