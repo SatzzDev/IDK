@@ -6,7 +6,7 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
-import { ytmp3, ytmp4, transcript, spotifydl, search, SatzzDev } from '../routes/scrape.js';
+import { ytmp3, ytmp4, transcript, spotifydl, upscaler, removebg, search, SatzzDev } from '../routes/scrape.js';
 import {selfReminder, profile, versus} from '../routes/canvas.js';
 import {Welcome, Goodbye,  Gura, Gfx1, Gfx2, Gfx3, Gfx4, Gfx5 } from '@lyncx/canvas'
 import yts from 'yt-search';
