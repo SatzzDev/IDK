@@ -43,6 +43,10 @@ function data() {
     closeProfileMenu() {
       this.isProfileMenuOpen = false
     },
+    isAiMenuOpen: false,
+      toggleAiMenu() {
+        this.isAiMenuOpen = !this.isAiMenuOpen
+      },
     isDownMenuOpen: false,
     toggleDownMenu() {
       this.isDownMenuOpen = !this.isDownMenuOpen

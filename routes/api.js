@@ -1,9 +1,6 @@
 import { Router } from 'express';
-import cors from 'cors';
-import secure from 'ssl-express-www';
 import path from 'path';
 import axios from 'axios';
-import * as cheerio from 'cheerio';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import { ytmp3, ytmp4, transcript, spotifydl, upscaler, removebg, search, SatzzDev } from '../routes/scrape.js';
@@ -365,7 +362,10 @@ router.get("/removebg", async(req, res) => {
 var { url } = req.query;
 if (!url) return res.json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
 let r = await removebg(url)
-res.json(r)
+const response = await axios.get(r.result, { responseType: "arraybuffer" });
+const buffer = Buffer.from(response.data, "binary");
+res.set({"Content-Type": "image/png", "Content-Length": buffer.length});
+res.send(buffer);
 })
 
 
@@ -373,7 +373,10 @@ router.get("/upscaler", async(req, res) => {
 var { url } = req.query;
 if (!url) return res.json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
 let r = await upscaler(url)
-res.json(r)
+const response = await axios.get(r.result, { responseType: "arraybuffer" });
+const buffer = Buffer.from(response.data, "binary");
+res.set({"Content-Type": "image/png", "Content-Length": buffer.length});
+res.send(buffer);
 })
 
 
