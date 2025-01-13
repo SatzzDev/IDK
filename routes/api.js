@@ -3,8 +3,8 @@ import path from 'path';
 import axios from 'axios';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
-import { ytmp3, ytmp4, transcript, spotifydl, upscaler, removebg, search, SatzzDev } from '../routes/scrape.js';
-import {selfReminder, profile, versus} from '../routes/canvas.js';
+import { ytmp3, ytmp4, transcript, spotifydl, upscaler, removebg, search, SatzzDev } from '../routes/utils/scrape.js';
+import {selfReminder, profile, versus} from '../routes/utils/canvas.js';
 import {Welcome, Goodbye,  Gura, Gfx1, Gfx2, Gfx3, Gfx4, Gfx5 } from '@lyncx/canvas'
 import yts from 'yt-search';
 
@@ -281,12 +281,12 @@ res.status(500).send("Failed to load image.");
 router.get("/jadwal-sholat", async (req, res) => {
 let { kota } = req.query;
 if (!kota)
-return res.json({
+return res.status(400).json({
 status: false,
-creator: "SatganzDevs",
+creator: "@krniwnstria",
 message: "Masukkan parameter kota",
 });
-const { findKodeDaerah, jadwalSholat } = (await import("./jadwal-sholat.js"));
+const { findKodeDaerah, jadwalSholat } = (await import("./utils/jadwal-sholat.js"));
 let kd = await findKodeDaerah(kota);
 let riss = await jadwalSholat(kd.kode_daerah);
 res.json(riss);
@@ -298,7 +298,7 @@ res.json(riss);
 
 router.get("/yts", async(req, res) => {
 var { query } = req.query;
-if (!query) return res.json({ status : false, creator : `SatzzDev`, message: 'missing parameter query.'})
+if (!query) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter query.'})
 let r = await search(query)
 res.json(r)
 })
@@ -307,7 +307,7 @@ res.json(r)
 
 router.get("/ytlist", async(req, res) => {
 var { list } = req.query;
-if (!list) return res.json({ status : false, creator : `SatzzDev`, message: 'missing parameter list.'})
+if (!list) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter list.'})
 let r = await yts( { listId: list } )
 res.json(r)
 })
@@ -316,7 +316,7 @@ res.json(r)
 
 router.get("/ytplay", async(req, res) => {
 var { query } = req.query;
-if (!query) return res.json({ status : false, creator : `SatzzDev`, message: 'missing parameter query.'})
+if (!query) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter query.'})
 let r1 = await search(query)
 let r = await ytmp3(r1.results[0].url)
 res.json(r)
@@ -328,7 +328,7 @@ res.json(r)
 
 router.get("/ytmp3", async(req, res) => {
 var { url } = req.query;
-if (!url) return res.json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
+if (!url) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
 let r = await ytmp3(url)
 res.json(r)
 })
@@ -339,7 +339,7 @@ res.json(r)
 
 router.get("/ytmp4", async(req, res) => {
 var { url } = req.query;
-if (!url) return res.json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
+if (!url) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
 let r = await ytmp4(url)
 res.json(r)
 })
@@ -350,7 +350,7 @@ res.json(r)
 
 router.get("/spotifydl", async(req, res) => {
 var { url } = req.query;
-if (!url) return res.json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
+if (!url) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
 let r = await spotifydl(url)
 res.json(r)
 })
@@ -360,7 +360,7 @@ res.json(r)
 
 router.get("/removebg", async(req, res) => {
 var { url } = req.query;
-if (!url) return res.json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
+if (!url) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
 let r = await removebg(url)
 const response = await axios.get(r.result, { responseType: "arraybuffer" });
 const buffer = Buffer.from(response.data, "binary");
@@ -371,7 +371,7 @@ res.send(buffer);
 
 router.get("/upscaler", async(req, res) => {
 var { url } = req.query;
-if (!url) return res.json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
+if (!url) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
 let r = await upscaler(url)
 const response = await axios.get(r.result, { responseType: "arraybuffer" });
 const buffer = Buffer.from(response.data, "binary");
@@ -385,8 +385,8 @@ res.send(buffer);
 
 router.get("/surah/:surah", async (req, res) => {
 let { surah } = req.params;
-if (!surah) return res.json({ status: false, creator: "SatzzDev", message: "Parameter 'surah' surah diperlukan. Contoh: /surah/17" });
-let riss = await fetchJson(`https://raw.githubusercontent.com/Jabalsurya2105/Database/master/data/quranaudio.json`);
+if (!surah) return res.status(400).json({ status: false, creator: "SatzzDev", message: "Parameter 'surah' surah diperlukan. Contoh: /surah/17" });
+let riss = JSON.parse(fs.readFileSync(path.join(__dirname, 'utils/data/quranaudio.json')))
 let data = riss.filter((item) => item.number === parseInt(surah));
 res.json({
 status: true,
@@ -402,9 +402,9 @@ data,
 router.get("/surah-ayat/:surah/:ayat", async (req, res) => {
 let { surah, ayat } = req.params;
 if (!surah || !ayat)
-return res.json({
+return res.status(400).json({
 status: false,
-creator: "SatganzDevs",
+creator: "@krniwnstria",
 message:
 "Masukkan parameter nomor surah dan ayat, cth: /17/32",
 });
@@ -426,19 +426,19 @@ data,
 router.get("/hadist", async (req, res) => {
 let { query, nomor } = req.query;
 if (!query || !nomor)
-return res.json({
+return res.status(400).json({
 status: false,
-creator: "SatganzDevs",
+creator: "@krniwnstria",
 message:
 "Insert parameter query hadist dan nomor hadist, exempli gratia: ?query=abu  -daud&nomor=32, lista query: abu-daud, ahmad, bukhari, darimi, ibnu-majah, malik, muslim, nasai, tirmidzi",
 });
 let riss = await fetchJson(
-`https://raw.githubusercontent.com/SatzzDev/API/master/hadis/hadis%20${query}.json`,
+`https://raw.githubusercontent.com/Jabalsurya2105/database/master/hadis/hadis%20${query}.json`,
 );
 if (parseInt(nomor) > riss.available)
-return res.json({
+return res.status(400).json({
 status: false,
-creator: "SatganzDevs",
+creator: "@krniwnstria",
 message: `nomor hadist tidak tersedia, nomor yang tersedia adalah ${riss.available}`,
 });
 let data = riss.hadits.filter((item) => item.number === parseInt(nomor));
@@ -454,9 +454,7 @@ data,
 
 
 router.get("/renungan", async (req, res) => {
-let riss = await fetchJson(
-`https://raw.githubusercontent.com/SatzzDev/API/master/data/renungan.json`,
-);
+let riss = JSON.parse(fs.readFileSync(path.join(__dirname, 'utils/data/renungan.json')))
 let imageUrl = riss[Math.floor(Math.random() * riss.length)];
 const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
 const buffer = Buffer.from(response.data, "binary");
@@ -469,14 +467,27 @@ res.send(buffer);
 });
 
 
-
+router.get("/couple", async (req, res) => {
+let riss = JSON.parse(fs.readFileSync(path.join(__dirname, 'utils/data/couple.json')))
+let {male, female} = riss.result[Math.floor(Math.random() * riss.result.length)];
+res.json({
+status:true,
+creator:"@krniwnstria",
+result:{
+female,
+male
+}
+})
+});
 
 
 router.get("/wallpaper/", async (req, res) => {
-const { query, mobile } = req.query
-if (!query) return res.json({ status: false, creator: "SatzzDev", message: "Masukkan parameter query contoh: ?query=anime" })
-const { wallpaper } = await import("../routes/wallpaper.js")
-let r = await wallpaper(query, mobile)
+const { query, resolusi } = req.query
+if (!query || !resolusi) return res.status(400).json({ status: false, creator: "SatzzDev", message: "Masukkan parameter query dan resolusi contoh: ?query=anime&resolusi=1612x720" })
+const avaliableRes = ['2160x3840','1440x2560','1366x768','1080x1920','1024x600','960x544','800x1280','800x600','720x1280','540x960','480x854','480x800','360x640','320x480','320x240','240x400','240x320','3415x3415','2780x2780','3415x3415','2780x2780','1350x2400','1280x1280','938x1668','800x1420','800x1200','1600x1200','1400x1050','1280x1024','1280x960','1152x864','1024x768','3840x2400','3840x2160','2560x1600','2560x1440','2560x1080','2560x1024','2048x1152','1920x1200','1920x1080','1680x1050','1600x900','1440x900','1280x800','1280x720']
+if (!avaliableRes.includes(resolusi)) return res.status(400).json({status:false, creator:"@krniwnstria", message:"Resolusi yang tersedia adalah: "+avaliableRes.join(", ")})
+const { wallpaper } = await import("../routes/utils/wallpaper.js")
+let r = await wallpaper(query, resolusi)
 res.json(r)
 })
 
@@ -487,12 +498,12 @@ res.json(r)
 router.get("/pitutur", async (req, res) => {
 let { q } = req.query;
 if (!q)
-return res.json({
+return res.status(400).json({
 status: false,
-creator: "SatganzDevs",
+creator: "@krniwnstria",
 message: "Masukkan parameter q",
 });
-let { pitutur } = (await import("./berita.js"));
+let { pitutur } = (await import("../routes/utils/berita.js"));
 let riss = await pitutur(q);
 res.json(riss);
 });
@@ -504,12 +515,12 @@ res.json(riss);
 router.get("/igdl", async (req, res) => {
 let { url } = req.query;
 if (!url)
-return res.json({
+return res.status(400).json({
 status: false,
-creator: "SatganzDevs",
+creator: "@krniwnstria",
 message: "Masukkan parameter url!",
 });
-let { instaDL } = (await import("./snapinsta.js"));
+let { instaDL } = (await import("../routes/utils/snapinsta.js"));
 let riss = await instaDL(url);
 res.json(riss);
 });
@@ -521,12 +532,12 @@ res.json(riss);
 router.get("/xnxxsearch", async (req, res) => {
 let { query } = req.query;
 if (!query)
-return res.json({
+return res.status(400).json({
 status: false,
-creator: "SatganzDevs",
+creator: "@krniwnstria",
 message: "Masukkan parameter query!",
 });
-let { xnxxsearch } = (await import("./xnxx.js"));
+let { xnxxsearch } = (await import("../routes/utils/xnxx.js"));
 let riss = await xnxxsearch(query);
 res.json(riss);
 });
@@ -538,12 +549,12 @@ res.json(riss);
 router.get("/xnxxdl", async (req, res) => {
 let { url } = req.query;
 if (!url)
-return res.json({
+return res.status(400).json({
 status: false,
-creator: "SatganzDevs",
+creator: "@krniwnstria",
 message: "Masukkan parameter url!",
 });
-let { xnxxdl } = (await import("./xnxx.js"));
+let { xnxxdl } = (await import("../routes/utils/xnxx.js"));
 let riss = await xnxxdl(url);
 res.json(riss);
 });

@@ -2,7 +2,11 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import path from "path";
+import ejs from "ejs";
 import os from "os";
+import axios from "axios";
+import * as cheerio from 'cheerio';
+import { parseISO, formatDistanceToNow } from "date-fns";
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -74,6 +78,8 @@ app.enable('trust proxy');
 app.set("json spaces",2);
 
 app.use(express.static(path.join(__dirname, 'views')));
+app.use(express.static(path.join(__dirname, 'views/assets')));
+app.use(express.static(path.join(__dirname, 'views/audio')));
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
@@ -88,10 +94,14 @@ app.get("/", async(req, res) => {
 res.render('index', { total_request: requestCount, feature_list: getFeatureList(req).length});
 });
 
-
+app.get("/embed", async(req, res) => {
+res.render('embed');
+});
 
 app.use("/api", apiRoutes);
-
+app.use((req, res, next) => {
+  res.status(404).render('404');
+});
 //━━━━━━━━━━━━━━━[ Server Initialization ]━━━━━━━━━━━━━━━━━//
 app.listen(app.get("port"), () => {
 console.log(`Server on port ${app.get("port")}`);

@@ -161,6 +161,7 @@ transform: rotate(360deg);
 </ul>
 </div>
 </aside>
+
 <!-- Mobile sidebar -->
 <!-- Backdrop -->
 <div x-show="isSideMenuOpen" x-transition:enter="transition ease-in-out duration-150" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in-out duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-10 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center"></div>
@@ -407,153 +408,157 @@ Server Uptime
 </div>
 </div>
 </div>
-<!-- Card Welcome -->
-<div class="grid gap-6 mb-8 md:grid-cols-2">
-<div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-<span id="typing" class="mb-4 font-semibold text-gray-600 dark:text-gray-300 typing"></span>
-<p class="text-gray-600 dark:text-gray-400 mb-4">
-This API is currently under development. If you encounter any bugs or errors, please don't hesitate to contact us. Your feedback is valuable for improving the service.
-</p>
-</div>
-<div x-data="{ 
-isModalOpen: false, 
-audio: null, 
-searchQuery: '', 
-searchResults: [], 
-currentTrack: null, 
-currentIndex: 0, 
-isLoading: false, 
-playlist: [], 
-initAudio() {
-this.audio = new Audio();
-this.audio.addEventListener('ended', () => this.nextTrack());
-},
-async searchMusic() { 
-if (!this.searchQuery.trim()) return; 
-this.isLoading = true; 
-try { 
-const res = await fetch(`/api/yts?query=${encodeURIComponent(this.searchQuery)}`); 
-const data = await res.json(); 
-this.searchResults = data.results.slice(0, 5);
-this.playlist.push(...data.results.slice(0, 5)); 
-} catch (e) { 
-console.error(e); 
-} 
-this.isLoading = false; 
-}, 
-async playMusic(index) { 
-try { 
-const track = this.playlist[index]; 
-const res = await fetch(`/api/ytmp3?url=${encodeURIComponent(track.url)}`); 
-const data = await res.json(); 
-this.audio.src = data.download.url; 
-this.audio.load();
-this.audio.play(); 
-this.currentTrack = track; 
-this.currentIndex = index; 
-this.isModalOpen = false; 
-} catch (e) { 
-console.error(e); 
-} 
-}, 
-nextTrack() { 
-if (this.playlist.length > 0) { 
-const nextIndex = (this.currentIndex + 1) % this.playlist.length; 
-this.playMusic(nextIndex); 
-} 
-}, 
-prevTrack() { 
-if (this.playlist.length > 0) { 
-const prevIndex = (this.currentIndex - 1 + this.playlist.length) % this.playlist.length; 
-this.playMusic(prevIndex); 
-} 
-},
-togglePlayPause() {
-const buttonIcon = document.getElementById('ngentods');
-if (this.audio.paused) {
-this.audio.play();
-buttonIcon.classList.replace('fa-play', 'fa-pause');
-} else {
-this.audio.pause();
-buttonIcon.classList.replace('fa-pause', 'fa-play');
-}
-}
-}" x-init="initAudio">
-<!-- Player Section -->
-<div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-<template x-if="currentTrack">
-<div>
-<h2 class="mb-4 font-semibold text-gray-600 dark:text-gray-300"><strong>Now Playing</strong></h2>
-<div class="flex items-center">
-<img :src="currentTrack.image" alt="Cover Art" class="w-12 h-12 rounded-md object-cover mr-4" />
-<div class="flex-1">
-<h3 class="text-gray-600 dark:text-gray-400 mb-4 truncate" x-text="currentTrack.title"></h3>
-<div class="flex mt-2 space-x-4">
-<button @click="prevTrack" class="btn btn-circle btn-primary">
-<i class="fas fa-step-backward"></i>
-</button>
-<button @click="togglePlayPause" class="btn btn-circle btn-primary">
-<i id="ngentods" class="fas fa-play"></i>
-</button>
-<button @click="nextTrack" class="btn btn-circle btn-primary">
-<i class="fas fa-step-forward"></i>
-</button>
-</div>
-</div>
-</div>
-</div>
-</template>
-<template x-if="!currentTrack">
-<p class="text-center text-gray-500">No track playing</p>
-</template>
-<button @click="isModalOpen = true" class="btn btn-active btn-primary mt-4 w-full glass">Search</button>
-</div>
-<!-- Search Section -->
-<div x-show="isModalOpen" class="fixed inset-0 z-30 flex items-center justify-center bg-black bg-opacity-50">
-<div @click.away="isModalOpen = false" @keydown.escape="isModalOpen = false" class="w-full px-6 py-4 bg-white rounded-lg sm:m-4 sm:max-w-xl dark:bg-gray-800">
-<header class="flex justify-between">
-<h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Search Your Fav Songs!</h2>
-<button @click="isModalOpen = false" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">✕</button>
-</header>
-<div class="mt-4 flex">
-<input x-model="searchQuery" @keydown.enter="searchMusic" placeholder="Enter song or artist" class="w-full px-4 py-2 border rounded-lg mr-2 focus:ring-purple-300 dark:bg-gray-700 dark:text-white" />
-</div>
-<div class="mt-4">
-<template x-if="isLoading"><span class="loading loading-infinity loading-xl"></span></template>
-<template x-if="!isLoading && searchResults.length === 0"><p class="text-gray-500">No results found.</p></template>
-<template x-if="searchResults.length > 0">
-<ul>
-<template x-for="(result, index) in searchResults" :key="result.url">
-<li class="flex items-center justify-between py-2 border-b dark:border-gray-600">
-<div class="flex items-center space-x-4">
-<img :src="result.image" alt="" class="w-12 h-12 rounded-md object-cover" />
-<span class="text-sm text-gray-700 dark:text-gray-300" x-text="result.title"></span>
-</div>
-<button @click="
-const icon = document.querySelector(`#play-icon-${index}`); 
-if (icon) {
-await icon.classList.replace('fa-play', 'fa-spinner'); 
-await icon.classList.add('animate-spin');
-} 
-await playMusic(index); 
-if (icon) {
-await icon.classList.remove('animate-spin'); 
-await icon.classList.replace('fa-spinner', 'fa-pause');
-}
-" class="btn btn-info btn-circle">
-<i :id="'play-icon-' + index" class="fas fa-play"></i>
-</button>
-</li>
-</template>
-</ul>
-</template>
-</div>
-</div>
-</div>
-</div>
-
-</div>
-
+  <div class="grid gap-6 mb-8 md:grid-cols-2">
+    <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+    <span id="typing" class="mb-4 font-semibold text-gray-600 dark:text-gray-300 typing"></span>
+    <p class="text-gray-600 dark:text-gray-400 mb-4">
+    This API is currently under development. If you encounter any bugs or errors, please don't hesitate to contact us. Your feedback is valuable for improving the service.
+    </p>
+    </div>
+    <div x-data="{
+    tracks:[
+    {
+    title: 'Que Pasa',
+    cover: 'https://i.ytimg.com/vi/FqoTpD1Mux4/hqdefault.jpg',
+    source: 'Que Pasa (128kbps).mp3'
+    },
+    {
+    title: 'TRUMPET SAKTI',
+    cover: 'https://i.ytimg.com/vi/Yb8-LQigHbg/hqdefault.jpg',
+    source: 'TRUMPET SAKTI (128kbps).mp3'
+    },
+    {
+    title: 'Piw Piw',
+    cover: 'https://i.ytimg.com/vi/DVkYLWH0_ew/hqdefault.jpg',
+    source: 'Piw Piw (128kbps).mp3'
+    },
+    {
+    title: 'Booty Call',
+    cover: 'https://i.ytimg.com/vi/hME9PL2WKiY/hqdefault.jpg',
+    source: 'Booty Call (128kbps).mp3'
+    },
+    {
+    title: 'Dj Piw Piw Jj Bass Beton',
+    cover: 'https://i.ytimg.com/vi/mxnUjhi7qPY/hqdefault.jpg',
+    source: 'Dj Piw Piw Jj Bass Beton (128kbps).mp3'
+    },
+    {
+    title: 'NO BOXING NO KECE',
+    cover: 'https://i.ytimg.com/vi/6Hy-3hcJqoc/hqdefault.jpg',
+    source: 'NO BOXING NO KECE (128kbps).mp3'
+    },
+    {
+    title: 'CLNDK STREET BOYS',
+    cover: 'https://i.ytimg.com/vi/frUZW8DbC3E/hqdefault.jpg',
+    source: 'CLNDK STREET BOYS (128kbps).mp3'
+    },
+    {
+    title: 'DROP OVERHEAT',
+    cover: 'https://i.ytimg.com/vi/gPBFPWzWUBY/hqdefault.jpg',
+    source: 'DROP OVERHEAT (128kbps).mp3'
+    },
+    {
+    title: 'DROP MELODY NGEGASS',
+    cover: 'https://i.ytimg.com/vi/iY6Hmp_m0v0/hqdefault.jpg',
+    source: 'DROP MELODY NGEGASS (128kbps).mp3'
+    },
+    {
+    title: 'Aria Freaks Stadium',
+    cover: 'https://i.ytimg.com/vi/Ww_T0LvY1vI/hqdefault.jpg',
+    source: 'Aria Freaks Stadium (128kbps).mp3'
+    },
+    {
+    title: 'DROP ENAKEUN V5',
+    cover: 'https://i.ytimg.com/vi/aGAHR37bXF0/hqdefault.jpg',
+    source: 'DROP ENAKEUN V5 (128kbps).mp3'
+    },
+    {
+    title: 'JJ BBHC V2 RALEY RMX',
+    cover: 'https://i.ytimg.com/vi/mQ7kNFknwwI/hqdefault.jpg',
+    source: 'JJ BBHC V2 RALEY RMX (128kbps).mp3'
+    },
+    {
+    title: 'Plastic',
+    cover: 'https://i.ytimg.com/vi/pWdN_5ivlwc/hqdefault.jpg',
+    source: 'Plastic (128kbps).mp3'
+    },
+    {
+    title: 'Takutu',
+    cover: 'https://i.ytimg.com/vi/hGqjC7O9FCE/hqdefault.jpg',
+    source: 'Takutu (128kbps).mp3'
+    },
+    {
+    title: 'SOUND JJ Party BreakDutch VOL. 01 Melody Kane',
+    cover: 'https://i.ytimg.com/vi/M4j3k9I4S5Y/hqdefault.jpg',
+    source: 'SOUND JJ Party BreakDutch VOL. 01 Melody Kane(128kbps).mp3'
+    },
+    {
+    title: 'DROP BBHC',
+    cover: 'https://i.ytimg.com/vi/vr9M-d0c9Yg/hqdefault.jpg',
+    source: 'DROP BBHC(128kbps).mp3'
+    },
+    {
+    title: 'Oh Honey',
+    cover: 'https://i.ytimg.com/vi/TSlnGkRLARE/hqdefault.jpg',
+    source: 'Oh Honey(128kbps).mp3'
+    },
+    {
+    title: 'Mambo Jambo (feat. dub it)',
+    cover: 'https://i.ytimg.com/vi/o0geNmOVuBc/hqdefault.jpg',
+    source: 'Mambo Jambo (feat. dub it)(128kbps).mp3'
+    },
+    {
+    title: 'BEBEK BOXING',
+    cover: 'https://i.ytimg.com/vi/k91rG308P6c/hqdefault.jpg',
+    source: 'BEBEK BOXING(128kbps).mp3'
+    },
+    {
+    title: 'Uno Dos Tres',
+    cover: 'https://i.ytimg.com/vi/rhdyzSnvBJY/hqdefault.jpg',
+    source: 'Uno Dos Tres(128kbps).mp3'
+    },
+    {
+    title: 'Cartel',
+    cover: 'https://i.ytimg.com/vi/J1HR1_uG6VU/hqdefault.jpg',
+    source: 'Cartel(128kbps).mp3'
+    },
+    {
+    title: 'Tequila (Vocal Mix)',
+    cover: 'https://i.ytimg.com/vi/XUGuDKdsyn0/hqdefault.jpg',
+    source: 'Tequila (Vocal Mix)(128kbps).mp3'
+    }
+    ],
+    currentIndex: 0,
+    audio: null,
+    isPlaying: false,
+    get currentTrack() { return this.tracks[this.currentIndex]; },
+    init() { this.audio = new Audio('./audio/' + this.currentTrack.source); this.audio.addEventListener('ended', () => this.nextTrack()); },
+    togglePlayPause() { if (this.isPlaying) { this.audio.pause(); } else { this.audio.play(); } this.isPlaying = !this.isPlaying; },
+    nextTrack() { this.currentIndex = (this.currentIndex + 1) % this.tracks.length; this.playTrack(); },
+    prevTrack() { this.currentIndex = (this.currentIndex - 1 + this.tracks.length) % this.tracks.length; this.playTrack(); },
+    playTrack() { this.audio.src = './audio/' + this.currentTrack.source; this.audio.play(); this.isPlaying = true; }
+    }" x-init="init">
+    <div class="min-w-0 p-4 text-white bg-purple-600 rounded-lg shadow-xs">
+    <div class="flex items-center">
+    <img :src="currentTrack.cover" alt="Cover Art" class="w-12 h-12 rounded-md object-cover mr-4" />
+    <div class="flex-1">
+    <h3 class="text-lg font-bold truncate" x-text="currentTrack.title"></h3>
+    <div class="flex mt-2 space-x-4">
+    <button @click="prevTrack" class="btn btn-circle btn-info">
+    <i class="fas fa-step-backward"></i>
+    </button>
+    <button @click="togglePlayPause" class="btn btn-circle btn-success">
+    <i :class="'fas ' + (isPlaying ? 'fa-pause' : 'fa-play')"></i>
+    </button>
+    <button @click="nextTrack" class="btn btn-circle btn-info">
+    <i class="fas fa-step-forward"></i>
+    </button>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+  </div>
 </main>
 </div>
 </div>

@@ -69,7 +69,7 @@ ctx.fillStyle = "#0000FF";
 ctx.textAlign = "center";
 ctx.fillText(rightUsername.toUpperCase(), 960, 550);
 // VS Icon
-const vsIcon = await loadImage(path.join(__dirname, "versus.png"));
+const vsIcon = await loadImage(path.join(__dirname, "../assets/images/versus.png"));
 const vsWidth = 150;
 const vsHeight = 150;
 const vsX = canvas.width / 2 - vsWidth / 2;
@@ -118,7 +118,7 @@ ctx.clip();
 ctx.drawImage(avatar, 120, 120, 240, 240);
 ctx.restore();
 // Font Registration
-registerFont(path.join(__dirname, 'THEBOLDFONT-FREEVERSION.ttf'), { family: 'Bold' });
+registerFont(path.join(__dirname, '../assets/fonts/THEBOLDFONT-FREEVERSION.ttf'), { family: 'Bold' });
 // Username
 ctx.font = '50px Bold';
 ctx.fillStyle = '#FFFFFF';
@@ -134,7 +134,7 @@ ctx.lineTo(700 + textWidth / 2, 270);
 ctx.stroke();
 // Verified Icon
 if (isPremium || isOwner) {
-const verified = await loadImage(path.join(__dirname, 'verify.png'));
+const verified = await loadImage(path.join(__dirname, '../assets/images/verify.png'));
 const logoX = 700 + textWidth / 2 + 10;
 const logoY = 260 - 40;
 ctx.drawImage(verified, logoX, logoY, 50, 50);
@@ -191,19 +191,19 @@ export const selfReminder = async (quote) => {
 const canvas = createCanvas(1080, 1080); 
 const ctx = canvas.getContext('2d');
 try {
-registerFont(path.join(__dirname, 'FingerPaint-Regular.ttf'), { family: 'Finger' });
+registerFont(path.join(__dirname, '../assets/fonts/FingerPaint-Regular.ttf'), { family: 'Finger' });
 } catch (err) {
 console.error('Font registration failed', err);
 }
 ctx.fillStyle = '#F6F6EE'; 
 ctx.fillRect(0, 0, canvas.width, canvas.height);
-const garisImage = await loadImage(path.join(__dirname, 'garis.png')); 
+const garisImage = await loadImage(path.join(__dirname, '../assets/images/garis.png')); 
 const garisWidth = 500;
 const garisHeight = 500;
 const  garisX = (canvas.width -  garisWidth) / 2;
 const  garisY = (canvas.height -  garisHeight) / 2 - -200; 
 ctx.drawImage( garisImage,  garisX,  garisY,  garisWidth,  garisHeight);
-const bungaImage = await loadImage(path.join(__dirname, 'bunga.png')); 
+const bungaImage = await loadImage(path.join(__dirname, '../assets/images/bunga.png')); 
 const bungaWidth = 300;
 const bungaHeight = 300;
 const bungaX = (canvas.width - bungaWidth) / 2;
