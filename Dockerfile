@@ -1,14 +1,15 @@
 FROM node:18
 
-# Install ImageMagick
-RUN apt-get install -y libuuid imagemagick chromium 
+RUN apt-get update && apt-get install -y \
+  libuuid1 \
+  imagemagick \
+  chromium-browser \
+  --no-install-recommends && \
+  apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copy your project files
 WORKDIR /app
 COPY . /app
 
-# Install project dependencies
 RUN npm install
 
-# Run the application
 CMD ["npm", "run", "dev"]
