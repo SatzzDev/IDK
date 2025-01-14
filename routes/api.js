@@ -6,6 +6,7 @@ import fs from 'fs';
 import { ytmp3, ytmp4, transcript, spotifydl, upscaler, removebg, search, SatzzDev } from '../routes/utils/scrape.js';
 import {selfReminder, profile, versus} from '../routes/utils/canvas.js';
 import {Welcome, Goodbye,  Gura, Gfx1, Gfx2, Gfx3, Gfx4, Gfx5 } from '@lyncx/canvas'
+import {carbonSH} from '../routes/utils/puppeteer.js'
 import yts from 'yt-search';
 
 
@@ -494,6 +495,25 @@ res.json(r)
 
 
 
+router.get("/carbon", async (req, res) => {
+let { code } = req.query;
+if (!code)
+return res.status(400).json({
+status: false,
+creator: "@krniwnstria",
+message: "Masukkan parameter code!",
+});
+let riss = await carbonSH(code);
+res.set({
+"Content-Type": "image/jpeg",
+"Content-Length": riss.length,
+"Cache-Control": "public, max-age=31536000",
+});
+res.end(riss)
+});
+
+
+
 
 router.get("/pitutur", async (req, res) => {
 let { q } = req.query;
@@ -558,6 +578,9 @@ let { xnxxdl } = (await import("../routes/utils/xnxx.js"));
 let riss = await xnxxdl(url);
 res.json(riss);
 });
+
+
+
 
 
 export default router
