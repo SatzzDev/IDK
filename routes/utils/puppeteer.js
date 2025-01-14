@@ -3,12 +3,11 @@ import { exec } from "node:child_process";
 import { promisify } from "node:util";
 
 export async function carbonSH(codeSnippet) {
-const theme = "Verminal"
-const { stdout: chromiumPath } = await promisify(exec)("which chromium");
+const theme = "Verminal"; // Theme for Carbon
 const browser = await puppeteer.launch({
 headless: true,
-args: ['--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage'],
-executablePath: chromiumPath.trim(),
+args: ["--no-sandbox", "--disable-setuid-sandbox"],
+executablePath: puppeteer.executablePath(), // Use Puppeteer's bundled Chromium
 });
 const page = await browser.newPage();
 await page.setViewport({width: 1080, height: 1080, deviceScaleFactor: 2});
