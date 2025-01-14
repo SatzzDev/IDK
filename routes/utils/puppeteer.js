@@ -4,7 +4,10 @@ import { promisify } from "node:util";
 
 export async function carbonSH(codeSnippet) {
 const theme = "Verminal"; // Theme for Carbon
-const browser = await puppeteer.launch();
+const browser = await puppeteer.launch({
+executablePath: '/usr/bin/chromium-browser',
+args: ['--no-sandbox', '--disable-setuid-sandbox']
+});
 const page = await browser.newPage();
 await page.setViewport({width: 1080, height: 1080, deviceScaleFactor: 2});
 await page.goto("https://carbon.now.sh/xsP2TOBZdgtM0krXAZPZ", { waitUntil: "networkidle2" });
