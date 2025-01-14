@@ -55,7 +55,7 @@ ctx.clip();
 ctx.drawImage(rightAvatar, 830, 230, 260, 260);
 ctx.restore();
 // Font Registration
-registerFont(path.join(__dirname, "THEBOLDFONT-FREEVERSION.ttf"), {
+registerFont(path.join(__dirname, "../assets/fonts/THEBOLDFONT-FREEVERSION.ttf"), {
 family: "Bold",
 });
 // Left Username
@@ -95,7 +95,7 @@ const buttonColor = isOwner ? '#FFC107' : isPremium ? '#FFC107' : '#C0C0C0';
 const textColor = isOwner || isPremium ? '#000000' : '#FFFFFF';
 // Crown for Owner
 if (isOwner) {
-const crown = await loadImage(path.join(__dirname, 'crown.png'));
+const crown = await loadImage(path.join(__dirname, '../assets/images/crown.png'));
 const crownWidth = 100;
 const crownHeight = 100;
 const crownX = 240 - crownWidth / 2;
