@@ -1,6 +1,7 @@
 import puppeteer from 'puppeteer';
 import axios from 'axios';
 import qs from 'querystring';
+import fs from 'fs'
 import { exec } from "node:child_process";
 import { promisify } from "node:util";
 import * as cheerio from 'cheerio';
@@ -15,7 +16,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 //━━━━━━━━━━━━━━━[ AI ]━━━━━━━━━━━━━━━━━//
-export const SatzzDev = async(text) => {
+export const SatzzAI = async(text) => {
 const apiKey = 'AIzaSyDkOQDRZgySOEDYBr7-aMjVYeY-GCjF_ys';
 const genAI = new GoogleGenerativeAI(apiKey);
 const model = genAI.getGenerativeModel({

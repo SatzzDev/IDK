@@ -3,7 +3,7 @@ import path from 'path';
 import axios from 'axios';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
-import { ytmp3, ytmp4, transcript, spotifydl, upscaler, removebg, search, SatzzDev } from '../routes/utils/scrape.js';
+import { ytmp3, ytmp4, transcript, spotifydl, upscaler, removebg, search, SatzzAI } from '../routes/utils/scrape.js';
 import {selfReminder, profile, versus} from '../routes/utils/canvas.js';
 import {Welcome, Goodbye,  Gura, Gfx1, Gfx2, Gfx3, Gfx4, Gfx5 } from '@lyncx/canvas'
 import {carbonSH} from '../routes/utils/puppeteer.js'
@@ -278,7 +278,21 @@ res.status(500).send("Failed to load image.");
 
 
 
-
+router.get('/satzzAI', async(req, res) => {
+try {
+const { text } = req.query;
+if (!text) return res.status(400).send({ status: 400, message: "Masukkan parameter text" });
+const response = await SatzzAI(text);
+res.status(200).json({
+status: 200,
+creator: "@krniwnstria",
+result: response
+});
+} catch (error) {
+console.error("Error:", error);
+res.status(500).send({ status: 500, message: "Internal Server Error", error: error.message });
+}
+})
 router.get("/jadwal-sholat", async (req, res) => {
 let { kota } = req.query;
 if (!kota)
