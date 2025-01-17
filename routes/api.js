@@ -8,6 +8,7 @@ import fs from 'fs';
 
 
 //━━━━━━━━━━[ SCRAPER ]━━━━━━━━━━━━//
+import { nulis } from './utils/nulis.js';
 import { brat } from './utils/brat.js';
 import pinterest from './utils/pinterest.js';
 import { instaDL } from './utils/instagram.js';
@@ -450,16 +451,35 @@ router.get("/brat", async (req, res) => {
 try {
 const { text } = req.query;
 if (!text) return res.status(400).json({ status: false, creator: "@krniwnstria", message: "missing parameter text." });
-const r = await brat(text);
-res.set({ "Content-Type": "image/png", "Content-Length": r.length });
-res.send(r);
+const rs = await brat(text);
+  res.set({
+  "Content-Type": "image/jpeg",
+  "Content-Length": rs.length,
+  "Cache-Control": "public, max-age=31536000",
+  });
+  res.end(rs)
 } catch (error) {
 console.error("Error in /upscaler:", error.message);
 res.status(500).json({ status: false, creator: "@krniwnstria", message: "Internal Server Error", error: error.message });
 }
 });
 
-
+router.get("/nulis", async (req, res) => {
+try {
+const { nama, kelas, fakultas, text } = req.query;
+if (!nama || !kelas || !text) return res.status(400).json({ status: false, creator: "@krniwnstria", message: "missing parameter nama kelas and text. optional = fakultas=" });
+const rs = await nulis(nama, kelas, fakultas ? fakultas :'',text);
+res.set({
+"Content-Type": "image/jpeg",
+"Content-Length": rs.length,
+"Cache-Control": "public, max-age=31536000",
+});
+res.end(rs)
+} catch (error) {
+console.error("Error in /upscaler:", error.message);
+res.status(500).json({ status: false, creator: "@krniwnstria", message: "Internal Server Error", error: error.message });
+}
+});
 
 router.get("/surah/:surah", async (req, res) => {
 let { surah } = req.params;

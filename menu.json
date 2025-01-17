@@ -64,6 +64,7 @@
 "icon": "mdi mdi-image-edit",
 "submenu": [
 { "label": "Brat", "link": "/api/brat?text=hai" },
+{ "label": "Nulis", "link": "/api/nulis?nama=kurkur&kelas=1sd&text=hai" },
 { "label": "Carbon", "link": "/api/carbon/code=hello" },
 {
 "label": "Self Reminder",
