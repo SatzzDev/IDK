@@ -1,20 +1,35 @@
 function data() {
+  // Retrieve theme preference from localStorage or default system preference
   function getThemeFromLocalStorage() {
-    // if user already changed the theme, use it
-    if (window.localStorage.getItem('dark')) {
-      return JSON.parse(window.localStorage.getItem('dark'))
-    }
-
-    // else return their preferences
-    return (
-      !!window.matchMedia &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches
-    )
+    const darkTheme = window.localStorage.getItem('dark')
+    return darkTheme ? JSON.parse(darkTheme) : !!window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
   }
 
+  // Save the theme preference to localStorage
   function setThemeToLocalStorage(value) {
     window.localStorage.setItem('dark', value)
   }
+
+  // Create a dynamic state for any menu based on its name
+  function createMenuState(menuName) {
+    return {
+      [`is${menuName}MenuOpen`]: false,
+      [`toggle${menuName}Menu`]() {
+        this[`is${menuName}MenuOpen`] = !this[`is${menuName}MenuOpen`]
+      },
+      [`close${menuName}Menu`](){
+        this[`is${menuName}MenuOpen`] = false
+      }
+    }
+  }
+
+  const menuNames = [
+    'Side', 'Notifications', 'Profile', 'AI', 'Downloader', 'Islamic', 'Search', 'ImageMaker'
+  ];
+
+  const menuState = menuNames.reduce((acc, menuName) => {
+    return { ...acc, ...createMenuState(menuName) }
+  }, {})
 
   return {
     dark: getThemeFromLocalStorage(),
@@ -22,47 +37,7 @@ function data() {
       this.dark = !this.dark
       setThemeToLocalStorage(this.dark)
     },
-    isSideMenuOpen: false,
-    toggleSideMenu() {
-      this.isSideMenuOpen = !this.isSideMenuOpen
-    },
-    closeSideMenu() {
-      this.isSideMenuOpen = false
-    },
-    isNotificationsMenuOpen: false,
-    toggleNotificationsMenu() {
-      this.isNotificationsMenuOpen = !this.isNotificationsMenuOpen
-    },
-    closeNotificationsMenu() {
-      this.isNotificationsMenuOpen = false
-    },
-    isProfileMenuOpen: false,
-    toggleProfileMenu() {
-      this.isProfileMenuOpen = !this.isProfileMenuOpen
-    },
-    closeProfileMenu() {
-      this.isProfileMenuOpen = false
-    },
-    isAIMenuOpen: false,
-      toggleAIMenu() {
-        this.isAIMenuOpen = !this.isAIMenuOpen
-      },
-    isDownloaderMenuOpen: false,
-    toggleDownloaderMenu() {
-      this.isDownloaderMenuOpen = !this.isDownloaderMenuOpen
-    },
-    isIslamicMenuOpen: false,
-      toggleIslamicMenu() {
-        this.isIslamicMenuOpen = !this.isIslamicMenuOpen
-      },
-    isSearchMenuOpen: false,
-      toggleSearchMenu() {
-        this.isSearchMenuOpen = !this.isSearchMenuOpen
-      },
-    isImageMakerMenuOpen: false,
-      toggleImageMakerMenu() {
-        this.isImageMakerMenuOpen = !this.isImageMakerMenuOpen
-      },
+    ...menuState,
     // Modal
     isModalOpen: false,
     trapCleanup: null,
@@ -73,6 +48,6 @@ function data() {
     closeModal() {
       this.isModalOpen = false
       this.trapCleanup()
-    },
+    }
   }
 }
