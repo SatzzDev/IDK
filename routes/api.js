@@ -359,27 +359,35 @@ res.json(r)
 
 
 
-router.get("/removebg", async(req, res) => {
-var { url } = req.query;
-if (!url) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
-let r = await removebg(url)
-// const response = await axios.get(r.result, { responseType: "arraybuffer" });
-// const buffer = Buffer.from(response.data, "binary");
-// res.set({"Content-Type": "image/png", "Content-Length": buffer.length});
-// res.send(buffer);
-res.json(r)
+app.get("/removebg", async (req, res) => {
+  try {
+    const { url } = req.query
+    if (!url) return res.status(400).json({ status: false, creator: "SatzzDev", message: "missing parameter url." })
+    const resultBuffer = await removeBackgroundFromUrl(url)
+    res.set({ "Content-Type": "image/png", "Content-Length": resultBuffer.length })
+    res.send(resultBuffer)
+  } catch (error) {
+    console.error("Error in /removebg:", error.message)
+    res.status(500).json({ status: false, creator: "SatzzDev", message: "Internal Server Error", error: error.message })
+  }
 })
 
-
-router.get("/upscaler", async(req, res) => {
-var { url } = req.query;
-if (!url) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
-let r = await upscaler(url)
+router.get("/upscaler", async (req, res) => {
+try {
+const { url } = req.query;
+if (!url) return res.status(400).json({ status: false, creator: "SatzzDev", message: "missing parameter url." });
+const r = await upscaler(url);
+if (!r.result) return res.status(400).json({ status: false, creator: "SatzzDev", message: "Failed to get upscale result." });
 const response = await axios.get(r.result, { responseType: "arraybuffer" });
 const buffer = Buffer.from(response.data, "binary");
-res.set({"Content-Type": "image/png", "Content-Length": buffer.length});
+res.set({ "Content-Type": "image/png", "Content-Length": buffer.length });
 res.send(buffer);
-})
+} catch (error) {
+console.error("Error in /upscaler:", error.message);
+res.status(500).json({ status: false, creator: "SatzzDev", message: "Internal Server Error", error: error.message });
+}
+});
+
 
 
 

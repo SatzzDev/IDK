@@ -1,10 +1,13 @@
 import puppeteer from 'puppeteer';
 import axios from 'axios';
 import qs from 'querystring';
+import { exec } from "node:child_process";
+import { promisify } from "node:util";
 import * as cheerio from 'cheerio';
 import FormData from 'form-data';
 import yts from "yt-search";
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
+import Agent from 'fake-user-agent'
 //━━━━━━━━━━━━━━━[ AI ]━━━━━━━━━━━━━━━━━//
 export const SatzzDev = async(text) => {
 const apiKey = 'AIzaSyDkOQDRZgySOEDYBr7-aMjVYeY-GCjF_ys';
@@ -449,105 +452,111 @@ throw error;
 };
 
 
+const { stdout: chromiumPath } = await promisify(exec)("which chromium");
 
 
+const getCookiesAndUserAgent = async (path) => {
+    
+    browser = await puppeteer.launch({ 
+    executablePath: chromiumPath.trim(), 
+    args: ["--no-sandbox"]})
+    page = await browser.newPage();
+    await page.goto('https://pxpic.com'+path, { waitUntil: 'domcontentloaded' });
+    const cookies = await page.cookies();
+  
+  const userAgent = await page.evaluate(() => navigator.userAgent);
+  const cookieHeader = cookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ');
 
-const getCookies = async () => {
-const browser = await puppeteer.launch({ executablePath: '/usr/bin/google-chrome',
-args: ["--no-sandbox", "--disable-setuid-sandbox"]
-})
-const page = await browser.newPage();
-await page.goto('https://pxpic.com', { waitUntil: 'domcontentloaded' });
-const cookies = await page.cookies();
-const cookieHeader = cookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ');
 await browser.close();
-return cookieHeader;
-};
-export const removebg = async (imageUrl) => {
-try {
-const cookieHeader = await getCookies(); 
-const { data } = await axios.post('https://pxpic.com/callAiFunction', {
-imageUrl: imageUrl,
-targetFormat: "png",
-fileOriginalExtension: 
-imageUrl.endsWith('.jpg') ? 'jpg' :
-imageUrl.endsWith('.jpeg') ? 'jpeg' :
-imageUrl.endsWith('.png') ? 'png' :
-imageUrl.endsWith('.gif') ? 'gif' :
-imageUrl.endsWith('.bmp') ? 'bmp' :
-imageUrl.endsWith('.webp') ? 'webp' :
-imageUrl.endsWith('.tiff') ? 'tiff' :
-imageUrl.endsWith('.heif') ? 'heif' :
-imageUrl.endsWith('.svg') ? 'svg' : 'unknown',
-needCompress: "no",
-imageQuality: "100",
-compressLevel: "6",
-aiFunction: "removebg",
-upscalingLevel: ""
-}, { headers: { 
-'Accept': '*/*',
-'Accept-Encoding': 'gzip, deflate, br',
-'Accept-Language': 'en-US,en;q=0.9',
-'Content-Type': 'application/json',
-'Cookie': cookieHeader,
-'Origin': 'https://pxpic.com',
-'Referer': 'https://pxpic.com/task?taskId=46ddb6ae-638c-4b66-b9fc-c2388123042c',
-'Sec-Ch-Ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
-'Sec-Ch-Ua-Mobile': '?0',
-'Sec-Ch-Ua-Platform': '"Windows"',
-'Sec-Fetch-Dest': 'empty',
-'Sec-Fetch-Mode': 'cors',
-'Sec-Fetch-Site': 'same-origin',
-'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36'
-}});
 
-return { status: true, creator: "@krniwnstria", ...data };
-} catch (error) {
-return { status: false, creator: "@krniwnstria", message: error.message };
-}
+  return { cookieHeader, userAgent };
+};
+
+const downloadImage = async (url) => {
+  const response = await axios.get(url, { responseType: 'arraybuffer' });
+  return response.data;
+};
+
+const removeBackgroundWithRembg = (imageBuffer) => {
+  return new Promise((resolve, reject) => {
+    const tempImagePath = path.join(process.cwd(), 'temp_image.jpg');
+    const outputPath = path.join(process.cwd(), 'output_image.png');
+
+    fs.writeFileSync(tempImagePath, imageBuffer);
+    const command = `rembg i ${tempImagePath} ${outputPath}`;
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        reject(`Error: ${error.message}`);
+      }
+      if (stderr) {
+        reject(`stderr: ${stderr}`);
+      }
+
+      const resultBuffer = fs.readFileSync(outputPath);
+      resolve(resultBuffer);
+    });
+  });
+};
+
+export const removebg = async (imageUrl) => {
+  const imageBuffer = await downloadImage(imageUrl);
+  const resultBuffer = await removeBackgroundWithRembg(imageBuffer);
+  return resultBuffer;
 };
 
 export const upscaler = async (imageUrl) => {
-try {
-const cookieHeader = await getCookies(); 
-const { data } = await axios.post('https://pxpic.com/callAiFunction', {
-imageUrl: imageUrl,
-targetFormat: "png",
-fileOriginalExtension: 
-imageUrl.endsWith('.jpg') ? 'jpg' :
-imageUrl.endsWith('.jpeg') ? 'jpeg' :
-imageUrl.endsWith('.png') ? 'png' :
-imageUrl.endsWith('.gif') ? 'gif' :
-imageUrl.endsWith('.bmp') ? 'bmp' :
-imageUrl.endsWith('.webp') ? 'webp' :
-imageUrl.endsWith('.tiff') ? 'tiff' :
-imageUrl.endsWith('.heif') ? 'heif' :
-imageUrl.endsWith('.svg') ? 'svg' : 'unknown',
-needCompress: "no",
-imageQuality: "100",
-compressLevel: "6",
-aiFunction: "upscale",
-upscalingLevel: "4"
-}, { headers: { 
-'Accept': '*/*',
-'Accept-Encoding': 'gzip, deflate, br',
-'Accept-Language': 'en-US,en;q=0.9',
-'Content-Type': 'application/json',
-'Cookie': cookieHeader,
-'Origin': 'https://pxpic.com',
-'Referer': 'https://pxpic.com/task?taskId=46ddb6ae-638c-4b66-b9fc-c2388123042c',
-'Sec-Ch-Ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
-'Sec-Ch-Ua-Mobile': '?0',
-'Sec-Ch-Ua-Platform': '"Windows"',
-'Sec-Fetch-Dest': 'empty',
-'Sec-Fetch-Mode': 'cors',
-'Sec-Fetch-Site': 'same-origin',
-'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36'
-}});
-return { status: true, creator: "@krniwnstria", result: data.resultImageUrl };
-} catch (error) {
-return { status: false, creator: "@krniwnstria", message: error.message };
-}
+  try {
+    const { cookieHeader, userAgent } = await getCookiesAndUserAgent('/ai-image-upscaler');
+    const headers = {
+      'Accept': '*/*',
+      'Accept-Encoding': 'gzip, deflate, br',
+      'Accept-Language': 'en-US,en;q=0.9,id-ID;q=0.8,id;q=0.7',
+      'Content-Type': 'application/json',
+      'Cookie': `
+_ga=GA1.1.1586499107.1737122382; _gcl_au=1.1.68531219.1737122468; __gpi=UID=00000fee105c5c21:T=1737122387:RT=1737125447:S=ALNI_Mbu3LR0wY-XWTy6sIQWOonn51NyjA; _ga_46LKPKHGCC=GS1.1.1737125591.2.0.1737125595.0.0.0; __gads=ID=9edd057d47ee4679:T=1737122387:RT=1737126224:S=ALNI_MbxMhyp3hekex1U6hbPzR7jKWlllg; __eoi=ID=46ce50a6c0e63bfc:T=1737122387:RT=1737126224:S=AA-AfjYo7g1Z0vhDqsX2qVEu0RK0; FCNEC=%5B%5B%22AKsRol_3gdMeUawYGT43ROGxtryJDyZHSEWfgaGcZ-BiKu5nzlgvF9e3FfVEGu1CVeAD82C8aaVVwhFmrceMoV5cZ-zknSlps7zg4XCztWgXOzN84fsB9gjFsl7Xl4DH4_TKLIK-FIuh0106fIY8hWxIqXbNUcctAA%3D%3D%22%5D%5`,
+      'User-Agent':'Postify/1.0.0',
+      'Origin': 'https://pxpic.com',
+      'Sec-Ch-Ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+      'Sec-Ch-Ua-Mobile': '?0',
+      'Sec-Ch-Ua-Platform': '"Windows"',
+      'Sec-Fetch-Dest': 'empty',
+      'Sec-Fetch-Mode': 'cors',
+      'Sec-Fetch-Site': 'same-origin'
+    };
+    const { data } = await axios.post('https://pxpic.com/callAiFunction', {
+      imageUrl: imageUrl,
+      targetFormat: "png",
+      fileOriginalExtension: 
+        imageUrl.endsWith('.jpg') ? 'jpg' :
+        imageUrl.endsWith('.jpeg') ? 'jpeg' :
+        imageUrl.endsWith('.png') ? 'png' :
+        imageUrl.endsWith('.gif') ? 'gif' :
+        imageUrl.endsWith('.bmp') ? 'bmp' :
+        imageUrl.endsWith('.webp') ? 'webp' :
+        imageUrl.endsWith('.tiff') ? 'tiff' :
+        imageUrl.endsWith('.heif') ? 'heif' :
+        imageUrl.endsWith('.svg') ? 'svg' : 'unknown',
+      needCompress: "no",
+      imageQuality: "100",
+      compressLevel: "6",
+      aiFunction: "upscale",
+      upscalingLevel: "4"
+    }, { headers });
+
+    return { status: true, creator: "@krniwnstria", result: data.resultImageUrl };
+  } catch (error) {
+    return { status: false, creator: "@krniwnstria", message: error.message };
+  }
+};
+
+// When you're done using the browser session, you can call browser.close()
+const closeBrowser = async () => {
+  if (browser) {
+    await browser.close();
+    browser = null;
+    page = null;
+    cookies = [];
+  }
 };
 
 

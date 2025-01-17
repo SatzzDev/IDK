@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 export async function carbonSH(codeSnippet) {
 const theme = "Verminal"; // Theme for Carbon
 const browser = await puppeteer.launch({
-// headless: false,
+//headless: false,
 executablePath: '/usr/bin/google-chrome',
 args: ["--no-sandbox", "--disable-setuid-sandbox"],
 });
