@@ -671,7 +671,7 @@ creator: "@krniwnstria",
 message: "[ ! ] mising query parameter url!",
 });
 let rissone = await xnxxdl(url);
-let ro = await getBuffer(rissone.files.HLS ? rissone.files.HLS : rissone.files.high ? rissone.files.high : rissone.files.low)
+let ro = await getBuffer(rissone.files.high ? rissone.files.high : rissone.files.low)
 res.set({
 "Content-Type": "video/mp4",
 "Content-Length": ro.length,
