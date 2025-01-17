@@ -359,17 +359,17 @@ res.json(r)
 
 
 
-app.get("/removebg", async (req, res) => {
-  try {
-    const { url } = req.query
-    if (!url) return res.status(400).json({ status: false, creator: "SatzzDev", message: "missing parameter url." })
-    const resultBuffer = await removeBackgroundFromUrl(url)
-    res.set({ "Content-Type": "image/png", "Content-Length": resultBuffer.length })
-    res.send(resultBuffer)
-  } catch (error) {
-    console.error("Error in /removebg:", error.message)
-    res.status(500).json({ status: false, creator: "SatzzDev", message: "Internal Server Error", error: error.message })
-  }
+router.get("/removebg", async (req, res) => {
+try {
+const { url } = req.query
+if (!url) return res.status(400).json({ status: false, creator: "SatzzDev", message: "missing parameter url." })
+const resultBuffer = await removebg(url)
+res.set({ "Content-Type": "image/png", "Content-Length": resultBuffer.length })
+res.send(resultBuffer)
+} catch (error) {
+console.error("Error in /removebg:", error.message)
+res.status(500).json({ status: false, creator: "SatzzDev", message: "Internal Server Error", error: error.message })
+}
 })
 
 router.get("/upscaler", async (req, res) => {
