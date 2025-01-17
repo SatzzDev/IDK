@@ -363,10 +363,11 @@ router.get("/removebg", async(req, res) => {
 var { url } = req.query;
 if (!url) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
 let r = await removebg(url)
-const response = await axios.get(r.result, { responseType: "arraybuffer" });
-const buffer = Buffer.from(response.data, "binary");
-res.set({"Content-Type": "image/png", "Content-Length": buffer.length});
-res.send(buffer);
+// const response = await axios.get(r.result, { responseType: "arraybuffer" });
+// const buffer = Buffer.from(response.data, "binary");
+// res.set({"Content-Type": "image/png", "Content-Length": buffer.length});
+// res.send(buffer);
+res.json(r)
 })
 
 
