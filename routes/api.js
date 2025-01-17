@@ -382,7 +382,7 @@ res.set({ "Content-Type": "image/png", "Content-Length": resultBuffer.length })
 res.send(resultBuffer)
 } catch (error) {
 console.error("Error in /removebg:", error.message)
-res.status(500).json({ status: false, creator: "SatzzDev", message: "Internal Server Error", error: error.message })
+res.status(500).json({ status: false, creator: "SatzzDev", message: "Internal Server Error", error: error })
 }
 })
 
