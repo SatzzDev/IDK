@@ -1,41 +1,17 @@
-# Use the latest Node.js LTS (Long Term Support) version as the base image
 FROM node:21.7.3-slim
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    gnupg \
-    wget \
-    python3 \
-    python3-pip \
-    python3-dev \
-    libmagic1 \
-    google-chrome-stable \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install gnupg wget python3-pip -y && \
+  wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg && \
+  sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
+  apt-get update && \
+  apt-get install google-chrome-stable -y --no-install-recommends && \
+  rm -rf /var/lib/apt/lists/*
 
-# Install rembg dependencies
-RUN pip3 install --no-cache-dir \
-    rembg \
-    onnxruntime \
-    click \
-    asyncer \
-    fastapi \
-    gradio \
-    uvicorn \
-    python-multipart \
-    watchdog \
-    aiohttp \
+RUN pip3 install --no-cache-dir rembg onnxruntime click asyncer fastapi gradio uvicorn
 
-
-
-# Copy your project files
 WORKDIR /app
 COPY . /app
 
-# Install project dependencies
 RUN npm install
 
-# Expose port if necessary (optional)
-EXPOSE 3000
-
-# Run the application
 CMD ["npm", "run", "dev"]
