@@ -8,6 +8,12 @@ import FormData from 'form-data';
 import yts from "yt-search";
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 import Agent from 'fake-user-agent'
+import path from 'path'
+import { fileURLToPath } from 'url';
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 //━━━━━━━━━━━━━━━[ AI ]━━━━━━━━━━━━━━━━━//
 export const SatzzDev = async(text) => {
 const apiKey = 'AIzaSyDkOQDRZgySOEDYBr7-aMjVYeY-GCjF_ys';
