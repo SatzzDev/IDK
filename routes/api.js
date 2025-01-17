@@ -3,10 +3,19 @@ import path from 'path';
 import axios from 'axios';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
-import { ytmp3, ytmp4, transcript, spotifydl, upscaler, removebg, search, SatzzAI } from '../routes/utils/scrape.js';
-import {selfReminder, profile, versus} from '../routes/utils/canvas.js';
+
+
+
+
+//━━━━━━━━━━[ SCRAPER ]━━━━━━━━━━━━//
+import { xnxxsearch, xnxxdl } from './utils/xnxx.js';
+import { tiktokStalk } from './utils/tiktokStalk.js';
+import { findKodeDaerah, jadwalSholat } from "./utils/jadwal-sholat.js";
+import { ytmp3, ytmp4, transcript, upscaler, removebg, search, SatzzAI } from './utils/scrape.js';
+import { spotifySearch, spotifydl } from './utils/spotify.js';
+import {selfReminder, profile, versus} from './utils/canvas.js';
 import {Welcome, Goodbye,  Gura, Gfx1, Gfx2, Gfx3, Gfx4, Gfx5 } from '@lyncx/canvas'
-import {carbonSH} from '../routes/utils/puppeteer.js'
+import {carbonSH} from './utils/puppeteer.js'
 import yts from 'yt-search';
 
 
@@ -19,7 +28,7 @@ const __dirname = path.dirname(__filename);
 
 
 
-
+//━━━━━━━━━━[ FUNCTION ]━━━━━━━━━━━━//
 const fetchJson = async (url, options) => {
 try {
 options ? options : {};
@@ -32,6 +41,15 @@ return err;
 };
 
 
+const getBuffer = async (url, options) => { 
+try { 
+options ? options : {} 
+const res = await axios({ method: "get", url, headers: { 'DNT': 1, 'Upgrade-Insecure-Request': 1 }, ...options, responseType: 'arraybuffer' }) 
+return res.data 
+} catch (err) { 
+return err 
+}
+}
 
 
 
@@ -45,8 +63,7 @@ return err;
 
 
 
-
-
+//━━━━━━━━━━[ START OF API GET ]━━━━━━━━━━━━//
 
 
 
@@ -301,7 +318,6 @@ status: false,
 creator: "@krniwnstria",
 message: "Masukkan parameter kota",
 });
-const { findKodeDaerah, jadwalSholat } = (await import("./utils/jadwal-sholat.js"));
 let kd = await findKodeDaerah(kota);
 let riss = await jadwalSholat(kd.kode_daerah);
 res.json(riss);
@@ -363,6 +379,26 @@ res.json(r)
 
 
 
+
+router.get("/ttstalk", async(req, res) => {
+var { username } = req.query;
+if (!username) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter username.'})
+let r = await tiktokStalk(username)
+res.json(r)
+})
+
+
+
+
+
+router.get("/spotify", async(req, res) => {
+var { query } = req.query;
+if (!query) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter query.'})
+let r = await spotifySearch(query)
+res.json(r)
+})
+
+
 router.get("/spotifydl", async(req, res) => {
 var { url } = req.query;
 if (!url) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
@@ -377,9 +413,8 @@ router.get("/removebg", async (req, res) => {
 try {
 const { url } = req.query
 if (!url) return res.status(400).json({ status: false, creator: "SatzzDev", message: "missing parameter url." })
-const resultBuffer = await removebg(url)
-res.set({ "Content-Type": "image/png", "Content-Length": resultBuffer.length })
-res.send(resultBuffer)
+const r = await removebg(url)
+res.json(r)
 } catch (error) {
 console.error("Error in /removebg:", error.message)
 res.status(500).json({ status: false, creator: "SatzzDev", message: "Internal Server Error", error: error })
@@ -538,19 +573,6 @@ res.end(riss)
 
 
 
-router.get("/pitutur", async (req, res) => {
-let { q } = req.query;
-if (!q)
-return res.status(400).json({
-status: false,
-creator: "@krniwnstria",
-message: "Masukkan parameter q",
-});
-let { pitutur } = (await import("../routes/utils/berita.js"));
-let riss = await pitutur(q);
-res.json(riss);
-});
-
 
 
 
@@ -580,7 +602,6 @@ status: false,
 creator: "@krniwnstria",
 message: "Masukkan parameter query!",
 });
-let { xnxxsearch } = (await import("../routes/utils/xnxx.js"));
 let riss = await xnxxsearch(query);
 res.json(riss);
 });
@@ -597,9 +618,15 @@ status: false,
 creator: "@krniwnstria",
 message: "Masukkan parameter url!",
 });
-let { xnxxdl } = (await import("../routes/utils/xnxx.js"));
-let riss = await xnxxdl(url);
-res.json(riss);
+let rissone = await xnxxdl(url);
+let ro = await getBuffer(rissone.files.HLS ? rissone.files.HLS : rissone.files.high ? rissone.files.high : rissone.files.low)
+res.set({
+"Content-Type": "video/mp4",
+"Content-Length": ro.length,
+"Cache-Control": "public, max-age=31536000",
+"Accept-Ranges": "bytes", 
+});
+res.end(ro)
 });
 
 

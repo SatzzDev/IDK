@@ -46,56 +46,6 @@ return result.response.text()
 //━━━━━━━━━━━━━━━[ END OF AI ]━━━━━━━━━━━━━━━━━//
 
 //━━━━━━━━━━━━━━━[ DOWNLOADER ]━━━━━━━━━━━━━━━━━//
-export const spotifydl = async(url) => {
-return new Promise(async (resolve, reject) => {
-try {
-const res = await axios.get(
-`https://api.fabdl.com/spotify/get?url=${encodeURIComponent(url)}`,
-{
-headers: {
-accept: "application/json, text/plain, */*",
-"accept-language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",
-"sec-ch-ua": "\"Not)A;Brand\";v=\"24\", \"Chromium\";v=\"116\"",
-"sec-ch-ua-mobile": "?1",
-"sec-ch-ua-platform": "\"Android\"",
-"sec-fetch-dest": "empty",
-"sec-fetch-mode": "cors",
-"sec-fetch-site": "cross-site",
-Referer: "https://spotifydownload.org/",
-"Referrer-Policy": "strict-origin-when-cross-origin",
-},
-}
-);
-const yanz = await axios.get(
-`https://api.fabdl.com/spotify/mp3-convert-task/${res.data.result.gid}/${res.data.result.id}`,
-{
-headers: {
-accept: "application/json, text/plain, */*",
-"accept-language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",
-"sec-ch-ua": "\"Not)A;Brand\";v=\"24\", \"Chromium\";v=\"116\"",
-"sec-ch-ua-mobile": "?1",
-"sec-ch-ua-platform": "\"Android\"",
-"sec-fetch-dest": "empty",
-"sec-fetch-mode": "cors",
-"sec-fetch-site": "cross-site",
-Referer: "https://spotifydownload.org/",
-"Referrer-Policy": "strict-origin-when-cross-origin",
-},
-}
-);
-const result = {};
-result.title = res.data.result.name;
-result.type = res.data.result.type;
-result.artis = res.data.result.artists;
-result.durasi = res.data.result.duration_ms;
-result.image = res.data.result.image;
-result.download = "https://api.fabdl.com" + yanz.data.result.download_url;
-resolve(result);
-} catch (error) {
-reject(error);
-}
-});
-};
 
 function getYouTubeVideoId(url) {
 const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|v\/|embed\/|user\/[^\/\n\s]+\/)?(?:watch\?v=|v%3D|embed%2F|video%2F)?|youtu\.be\/|youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtube\.com\/v\/|youtube\.com\/shorts\/|youtube\.com\/playlist\?list=)([a-zA-Z0-9_-]{11})/;
@@ -131,7 +81,8 @@ origin: 'https://yt.savetube.me/',
 'user-agent': 'Postify/1.0.0',
 'Content-Type': 'application/json'
 };
-const cdnNumber = 51
+const umber = [51,54,56,57,58,59,60,61,62,63,64,65,66]
+const cdnNumber = umber[Math.floor(Math.random() * umber.length)]
 const cdnUrl = `cdn${cdnNumber}.savetube.su`;
 const videoInfoResponse = await axios.post(
 `https://${cdnUrl}/info`, {
@@ -478,37 +429,21 @@ await browser.close();
 return { cookieHeader, userAgent };
 };
 
-const downloadImage = async (url) => {
-const response = await axios.get(url, { responseType: 'arraybuffer' });
-return response.data;
-};
-
-const removeBackgroundWithRembg = (imageBuffer) => {
-return new Promise((resolve, reject) => {
-const tempImagePath = path.join(process.cwd(), 'temp_image.jpg');
-const outputPath = path.join(process.cwd(), 'output_image.png');
-
-fs.writeFileSync(tempImagePath, imageBuffer);
-const command = `rembg i ${tempImagePath} ${outputPath}`;
-exec(command, (error, stdout, stderr) => {
-if (error) {
-reject(`Error: ${error.message}`);
+export async function removebg(imageUrl) {
+    const response = await fetch('https://pxpic.com/callRemoveBackground', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ imageUrl })
+    });
+    const result = await response.json();
+    return {
+        author: "@krniwnstria",
+        status: 200,
+        url: result.resultImageUrl
+    };
 }
-if (stderr) {
-reject(`stderr: ${stderr}`);
-}
-
-const resultBuffer = fs.readFileSync(outputPath);
-resolve(resultBuffer);
-});
-});
-};
-
-export const removebg = async (imageUrl) => {
-const imageBuffer = await downloadImage(imageUrl);
-const resultBuffer = await removeBackgroundWithRembg(imageBuffer);
-return resultBuffer;
-};
 
 export const upscaler = async (imageUrl) => {
 try {

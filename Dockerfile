@@ -1,19 +1,19 @@
+# Use the latest Node.js LTS (Long Term Support) version as the base image
 FROM node:21.7.3-slim
 
-RUN apt-get update && apt-get install gnupg wget python3-venv python3-pip -y && \
+RUN apt-get update && apt-get install gnupg wget -y && \
   wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg && \
   sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
   apt-get update && \
   apt-get install google-chrome-stable -y --no-install-recommends && \
   rm -rf /var/lib/apt/lists/*
 
-# Create a Python virtual environment
-RUN python3 -m venv /venv
-RUN /venv/bin/pip install --no-cache-dir rembg onnxruntime click asyncer fastapi gradio uvicorn
-
+# Copy your project files
 WORKDIR /app
 COPY . /app
 
+# Install project dependencies
 RUN npm install
 
+# Run the application
 CMD ["npm", "run", "dev"]

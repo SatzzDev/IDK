@@ -56,8 +56,8 @@ results
 }
 export const xnxxdl = (urlnya) => {
 return new Promise((resolve, reject) => {
-fetch(urlnya).then((res) => {
-let $ = cheerio.load(res, {
+axios.get(urlnya).then((res) => {
+let $ = cheerio.load(res.data, {
 xmlMode: false,
 });
 const title = $('meta[property="og:title"]').attr("content");
