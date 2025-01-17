@@ -420,8 +420,8 @@ const dlink = $('a.button.primary.expand')
 const link = $(el).attr('href');
 if (link === 'javascript:void(0);') return null;
 const teks = $(el).find('span').text().replace('Download', '').trim().toLowerCase()
-  .replace(/[\(\)]/g, '').replace(/\s+/g, '_')
-  .split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+.replace(/[\(\)]/g, '').replace(/\s+/g, '_')
+.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 return { title: teks, link };
 })
 .get()
@@ -453,108 +453,101 @@ throw error;
 
 
 const getCookies = async () => {
-  const browser = await puppeteer.launch({ headless: true });
-  const page = await browser.newPage();
-
-  // Navigate to the site where cookies are set
-  await page.goto('https://pxpic.com', { waitUntil: 'domcontentloaded' });
-
-  // Get the cookies from the page
-  const cookies = await page.cookies();
-  const cookieHeader = cookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ');
-
-  await browser.close();
-  return cookieHeader;
+const browser = await puppeteer.launch({ executablePath: '/usr/bin/google-chrome',
+args: ["--no-sandbox", "--disable-setuid-sandbox"]
+})
+const page = await browser.newPage();
+await page.goto('https://pxpic.com', { waitUntil: 'domcontentloaded' });
+const cookies = await page.cookies();
+const cookieHeader = cookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ');
+await browser.close();
+return cookieHeader;
 };
-
 export const removebg = async (imageUrl) => {
-  try {
-    const cookieHeader = await getCookies(); // Fetch cookies using Puppeteer
+try {
+const cookieHeader = await getCookies(); 
+const { data } = await axios.post('https://pxpic.com/callAiFunction', {
+imageUrl: imageUrl,
+targetFormat: "png",
+fileOriginalExtension: 
+imageUrl.endsWith('.jpg') ? 'jpg' :
+imageUrl.endsWith('.jpeg') ? 'jpeg' :
+imageUrl.endsWith('.png') ? 'png' :
+imageUrl.endsWith('.gif') ? 'gif' :
+imageUrl.endsWith('.bmp') ? 'bmp' :
+imageUrl.endsWith('.webp') ? 'webp' :
+imageUrl.endsWith('.tiff') ? 'tiff' :
+imageUrl.endsWith('.heif') ? 'heif' :
+imageUrl.endsWith('.svg') ? 'svg' : 'unknown',
+needCompress: "no",
+imageQuality: "100",
+compressLevel: "6",
+aiFunction: "removebg",
+upscalingLevel: ""
+}, { headers: { 
+'Accept': '*/*',
+'Accept-Encoding': 'gzip, deflate, br',
+'Accept-Language': 'en-US,en;q=0.9',
+'Content-Type': 'application/json',
+'Cookie': cookieHeader,
+'Origin': 'https://pxpic.com',
+'Referer': 'https://pxpic.com/task?taskId=46ddb6ae-638c-4b66-b9fc-c2388123042c',
+'Sec-Ch-Ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+'Sec-Ch-Ua-Mobile': '?0',
+'Sec-Ch-Ua-Platform': '"Windows"',
+'Sec-Fetch-Dest': 'empty',
+'Sec-Fetch-Mode': 'cors',
+'Sec-Fetch-Site': 'same-origin',
+'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36'
+}});
 
-    const { data } = await axios.post('https://pxpic.com/callAiFunction', {
-      imageUrl: imageUrl,
-      targetFormat: "png",
-      fileOriginalExtension: 
-        imageUrl.endsWith('.jpg') ? 'jpg' :
-        imageUrl.endsWith('.jpeg') ? 'jpeg' :
-        imageUrl.endsWith('.png') ? 'png' :
-        imageUrl.endsWith('.gif') ? 'gif' :
-        imageUrl.endsWith('.bmp') ? 'bmp' :
-        imageUrl.endsWith('.webp') ? 'webp' :
-        imageUrl.endsWith('.tiff') ? 'tiff' :
-        imageUrl.endsWith('.heif') ? 'heif' :
-        imageUrl.endsWith('.svg') ? 'svg' : 'unknown',
-      needCompress: "no",
-      imageQuality: "100",
-      compressLevel: "6",
-      aiFunction: "removebg",
-      upscalingLevel: ""
-    }, { headers: { 
-      'Accept': '*/*',
-      'Accept-Encoding': 'gzip, deflate, br',
-      'Accept-Language': 'en-US,en;q=0.9',
-      'Content-Type': 'application/json',
-      'Cookie': cookieHeader,
-      'Origin': 'https://pxpic.com',
-      'Referer': 'https://pxpic.com/task?taskId=46ddb6ae-638c-4b66-b9fc-c2388123042c',
-      'Sec-Ch-Ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
-      'Sec-Ch-Ua-Mobile': '?0',
-      'Sec-Ch-Ua-Platform': '"Windows"',
-      'Sec-Fetch-Dest': 'empty',
-      'Sec-Fetch-Mode': 'cors',
-      'Sec-Fetch-Site': 'same-origin',
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36'
-    }});
-
-    return { status: true, creator: "@krniwnstria", ...data };
-  } catch (error) {
-    return { status: false, creator: "@krniwnstria", message: error.message };
-  }
+return { status: true, creator: "@krniwnstria", ...data };
+} catch (error) {
+return { status: false, creator: "@krniwnstria", message: error.message };
+}
 };
 
 export const upscaler = async (imageUrl) => {
-  try {
-    const cookieHeader = await getCookies(); // Fetch cookies using Puppeteer
-
-    const { data } = await axios.post('https://pxpic.com/callAiFunction', {
-      imageUrl: imageUrl,
-      targetFormat: "png",
-      fileOriginalExtension: 
-        imageUrl.endsWith('.jpg') ? 'jpg' :
-        imageUrl.endsWith('.jpeg') ? 'jpeg' :
-        imageUrl.endsWith('.png') ? 'png' :
-        imageUrl.endsWith('.gif') ? 'gif' :
-        imageUrl.endsWith('.bmp') ? 'bmp' :
-        imageUrl.endsWith('.webp') ? 'webp' :
-        imageUrl.endsWith('.tiff') ? 'tiff' :
-        imageUrl.endsWith('.heif') ? 'heif' :
-        imageUrl.endsWith('.svg') ? 'svg' : 'unknown',
-      needCompress: "no",
-      imageQuality: "100",
-      compressLevel: "6",
-      aiFunction: "upscale",
-      upscalingLevel: "4"
-    }, { headers: { 
-      'Accept': '*/*',
-      'Accept-Encoding': 'gzip, deflate, br',
-      'Accept-Language': 'en-US,en;q=0.9',
-      'Content-Type': 'application/json',
-      'Cookie': cookieHeader,
-      'Origin': 'https://pxpic.com',
-      'Referer': 'https://pxpic.com/task?taskId=46ddb6ae-638c-4b66-b9fc-c2388123042c',
-      'Sec-Ch-Ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
-      'Sec-Ch-Ua-Mobile': '?0',
-      'Sec-Ch-Ua-Platform': '"Windows"',
-      'Sec-Fetch-Dest': 'empty',
-      'Sec-Fetch-Mode': 'cors',
-      'Sec-Fetch-Site': 'same-origin',
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36'
-    }});
-
-    return { status: true, creator: "@krniwnstria", result: data.resultImageUrl };
-  } catch (error) {
-    return { status: false, creator: "@krniwnstria", message: error.message };
-  }
+try {
+const cookieHeader = await getCookies(); 
+const { data } = await axios.post('https://pxpic.com/callAiFunction', {
+imageUrl: imageUrl,
+targetFormat: "png",
+fileOriginalExtension: 
+imageUrl.endsWith('.jpg') ? 'jpg' :
+imageUrl.endsWith('.jpeg') ? 'jpeg' :
+imageUrl.endsWith('.png') ? 'png' :
+imageUrl.endsWith('.gif') ? 'gif' :
+imageUrl.endsWith('.bmp') ? 'bmp' :
+imageUrl.endsWith('.webp') ? 'webp' :
+imageUrl.endsWith('.tiff') ? 'tiff' :
+imageUrl.endsWith('.heif') ? 'heif' :
+imageUrl.endsWith('.svg') ? 'svg' : 'unknown',
+needCompress: "no",
+imageQuality: "100",
+compressLevel: "6",
+aiFunction: "upscale",
+upscalingLevel: "4"
+}, { headers: { 
+'Accept': '*/*',
+'Accept-Encoding': 'gzip, deflate, br',
+'Accept-Language': 'en-US,en;q=0.9',
+'Content-Type': 'application/json',
+'Cookie': cookieHeader,
+'Origin': 'https://pxpic.com',
+'Referer': 'https://pxpic.com/task?taskId=46ddb6ae-638c-4b66-b9fc-c2388123042c',
+'Sec-Ch-Ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+'Sec-Ch-Ua-Mobile': '?0',
+'Sec-Ch-Ua-Platform': '"Windows"',
+'Sec-Fetch-Dest': 'empty',
+'Sec-Fetch-Mode': 'cors',
+'Sec-Fetch-Site': 'same-origin',
+'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36'
+}});
+return { status: true, creator: "@krniwnstria", result: data.resultImageUrl };
+} catch (error) {
+return { status: false, creator: "@krniwnstria", message: error.message };
+}
 };
 
 
