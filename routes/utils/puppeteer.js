@@ -4,9 +4,12 @@ import { promisify } from "node:util";
 
 export async function carbonSH(codeSnippet) {
 const theme = "Verminal"; // Theme for Carbon
+const { stdout: chromiumPath } = await promisify(exec)("which chromium");
+
 const browser = await puppeteer.launch({
-executablePath: '/usr/bin/chromium-browser',
-args: ['--no-sandbox', '--disable-setuid-sandbox']
+headless: true,
+args: ["--no-sandbox", "--disable-setuid-sandbox"],
+executablePath: chromiumPath.trim(),
 });
 const page = await browser.newPage();
 await page.setViewport({width: 1080, height: 1080, deviceScaleFactor: 2});
