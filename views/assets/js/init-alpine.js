@@ -43,25 +43,25 @@ function data() {
     closeProfileMenu() {
       this.isProfileMenuOpen = false
     },
-    isAiMenuOpen: false,
-      toggleAiMenu() {
-        this.isAiMenuOpen = !this.isAiMenuOpen
+    isAIMenuOpen: false,
+      toggleAIMenu() {
+        this.isAIMenuOpen = !this.isAIMenuOpen
       },
-    isDownMenuOpen: false,
-    toggleDownMenu() {
-      this.isDownMenuOpen = !this.isDownMenuOpen
+    isDownloaderMenuOpen: false,
+    toggleDownloaderMenu() {
+      this.isDownloaderMenuOpen = !this.isDownloaderMenuOpen
     },
-    isIslamMenuOpen: false,
-      toggleIslamMenu() {
-        this.isIslamMenuOpen = !this.isIslamMenuOpen
+    isIslamicMenuOpen: false,
+      toggleIslamicMenu() {
+        this.isIslamicMenuOpen = !this.isIslamicMenuOpen
       },
-    isIntMenuOpen: false,
-      toggleIntMenu() {
-        this.isIntMenuOpen = !this.isIntMenuOpen
+    isSearchMenuOpen: false,
+      toggleSearchMenu() {
+        this.isSearchMenuOpen = !this.isSearchMenuOpen
       },
-    isMakerMenuOpen: false,
-      toggleMakerMenu() {
-        this.isMakerMenuOpen = !this.isMakerMenuOpen
+    isImageMakerMenuOpen: false,
+      toggleImageMakerMenu() {
+        this.isImageMakerMenuOpen = !this.isImageMakerMenuOpen
       },
     // Modal
     isModalOpen: false,

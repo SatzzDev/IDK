@@ -1,0 +1,96 @@
+[
+{
+"name": "AI",
+"icon": "fas mdi mdi-robot-happy",
+"submenu": [
+{ "label": "SatzzAI", "link": "/api/satzzai?text=siapa%20anda" },
+{ "label": "Remove Background", "link": "/api/removebg?url=" },
+{ "label": "Upscaler", "link": "/api/upscaler?url=" }
+]
+},
+{
+"name": "Downloader",
+"icon": "mdi mdi-cloud-download",
+"submenu": [
+{
+"label": "Youtube MP3",
+"link": "/api/ytmp3?url=https://youtu.be/eEssr98eFjw"
+},
+{
+"label": "Youtube MP4",
+"link": "/api/ytmp4?url=https://youtu.be/eEssr98eFjw"
+},
+{ "label": "Spotify", "link": "/api/spotifydl" },
+{ "label": "Pinterest", "link": "/api/pinterest/download" },
+{ "label": "Mediafire", "link": "/api/mediafire" },
+{ "label": "Instagram", "link": "/api/igdl" }
+]
+},
+{
+"name": "Search",
+"icon": "mdi mdi-magnify",
+"submenu": [
+{
+"label": "Youtube Play",
+"link": "/api/ytplay?query=somebody's pleasure extended version"
+},
+{
+"label": "Youtube Search",
+"link": "/api/yts?query=somebody's%20pleasure extended version"
+},
+{
+"label": "Spotify Search",
+"link": "/api/spotify?query=somebody's%20pleasure extended version"
+},
+{
+"label": "Pinterest Search",
+"link": "/api/pinterest/search?query=siesta%20icon"
+},
+{ "label": "Wallpaper", "link": "/api/wallpaper?query=digital art" },
+{ "label": "xnxxsearch", "link": "/api/xnxxsearch?query=step mom" }
+]
+},
+{
+"name": "Islamic",
+"icon": "mdi mdi-star-crescent",
+"submenu": [
+{ "label": "Jadwal Sholat", "link": "/api/jadwal-sholat?kota=pekanbaru" },
+{ "label": "Quran Surah", "link": "/api/surah/1" },
+{ "label": "Quran Ayat", "link": "/api/surah-ayat/17/32" }
+]
+},
+{
+"name": "ImageMaker",
+"icon": "mdi mdi-image-edit",
+"submenu": [
+{ "label": "Brat", "link": "/api/brat?text=hai" },
+{ "label": "Carbon", "link": "/api/carbon/code=hello" },
+{
+"label": "Self Reminder",
+"link": "/api/self-reminder?text=its%20okay%20to%20take%20a%20break"
+},
+{
+"label": "Profile",
+"link": "/api/profile?username=Kurniawan%20Satria&avatar=https://i.ibb.co.com/LS0J8tV/thumb.jpg&isPremium=true&isOwner=true"
+},
+{
+"label": "Versus",
+"link": "/api/bewan?player1=Udin&player2=Asep&avatar1=https://i.ibb.co.com/LS0J8tV/thumb.jpg&avatar2=https://i.ibb.co/1s8T3sY/48f7ce63c7aa.jpg&isPremium=true"
+},
+{
+"label": "Welcome",
+"link": "/api/welcome?username=Satzz&groupname=Satzz&ppuser=https://i.ibb.co/1s8T3sY/48f7ce63c7aa.jpg&ppgc=https://i.ibb.co/G5mJZxs/rin.jpg&member=1000"
+},
+{
+"label": "Goodbye",
+"link": "/api/goodbye?username=Satzz&groupname=Satzz&ppuser=https://i.ibb.co/1s8T3sY/48f7ce63c7aa.jpg&ppgc=https://i.ibb.co/G5mJZxs/rin.jpg&member=1000"
+},
+{ "label": "Gura", "link": "/api/gura?text=SatzzDev" },
+{ "label": "Gfx 1", "link": "/api/gfx1?text=SatzzDev" },
+{ "label": "Gfx 2", "link": "/api/gfx2?text=SatzzDev" },
+{ "label": "Gfx 3", "link": "/api/gfx3?text1=Satzz&text2=Dev" },
+{ "label": "Gfx 4", "link": "/api/gfx4?text1=Satzz&text2=Dev" },
+{ "label": "Gfx 5", "link": "/api/gfx5?text=SatzzDev" }
+]
+}
+]

@@ -8,6 +8,10 @@ import fs from 'fs';
 
 
 //━━━━━━━━━━[ SCRAPER ]━━━━━━━━━━━━//
+import { brat } from './utils/brat.js';
+import pinterest from './utils/pinterest.js';
+import { instaDL } from './utils/instagram.js';
+import { mediafire } from './utils/mediafire.js';
 import { xnxxsearch, xnxxdl } from './utils/xnxx.js';
 import { tiktokStalk } from './utils/tiktokStalk.js';
 import { findKodeDaerah, jadwalSholat } from "./utils/jadwal-sholat.js";
@@ -17,7 +21,7 @@ import {selfReminder, profile, versus} from './utils/canvas.js';
 import {Welcome, Goodbye,  Gura, Gfx1, Gfx2, Gfx3, Gfx4, Gfx5 } from '@lyncx/canvas'
 import {carbonSH} from './utils/puppeteer.js'
 import yts from 'yt-search';
-
+import { Upscale } from './utils/upscale.js';
 
 
 
@@ -73,11 +77,11 @@ return err
 router.get("/welcome", async (req, res) => {
 try {
 const { ppgc, ppuser, username, groupname, member } = req.query;
-if (!ppgc) return res.status(400).send({ status: 400, message: "Masukkan parameter ppgc" });
-if (!ppuser) return res.status(400).send({ status: 400, message: "Masukkan parameter ppuser" });
-if (!username) return res.status(400).send({ status: 400, message: "Masukkan parameter username" });
-if (!groupname) return res.status(400).send({ status: 400, message: "Masukkan parameter groupname" });
-if (!member) return res.status(400).send({ status: 400, message: "Masukkan parameter member" });
+if (!ppgc) return res.status(400).send({ status: 400, message: "[ ! ] mising query parameter ppgc" });
+if (!ppuser) return res.status(400).send({ status: 400, message: "[ ! ] mising query parameter ppuser" });
+if (!username) return res.status(400).send({ status: 400, message: "[ ! ] mising query parameter username" });
+if (!groupname) return res.status(400).send({ status: 400, message: "[ ! ] mising query parameter groupname" });
+if (!member) return res.status(400).send({ status: 400, message: "[ ! ] mising query parameter member" });
 const background = req.query.background || "https://r4.wallpaperflare.com/wallpaper/39/346/426/digital-art-men-city-futuristic-night-hd-wallpaper-01b69d213afe95f35634472bcdf74a70.jpg";
 const image = await new Welcome().setUsername(username).setGuildName(groupname).setGuildIcon(ppgc).setMemberCount(member).setAvatar(ppuser).setBackground(background).toAttachment();
 const buffer = image.toBuffer();
@@ -96,11 +100,11 @@ res.status(500).send({ status: 500, message: "Internal Server Error", error: err
 router.get("/goodbye", async (req, res) => {
 try {
 const { ppgc, ppuser, username, groupname, member } = req.query;
-if (!ppgc) return res.status(400).send({ status: 400, message: "Masukkan parameter ppgc" });
-if (!ppuser) return res.status(400).send({ status: 400, message: "Masukkan parameter ppuser" });
-if (!username) return res.status(400).send({ status: 400, message: "Masukkan parameter username" });
-if (!groupname) return res.status(400).send({ status: 400, message: "Masukkan parameter groupname" });
-if (!member) return res.status(400).send({ status: 400, message: "Masukkan parameter member" });
+if (!ppgc) return res.status(400).send({ status: 400, message: "[ ! ] mising query parameter ppgc" });
+if (!ppuser) return res.status(400).send({ status: 400, message: "[ ! ] mising query parameter ppuser" });
+if (!username) return res.status(400).send({ status: 400, message: "[ ! ] mising query parameter username" });
+if (!groupname) return res.status(400).send({ status: 400, message: "[ ! ] mising query parameter groupname" });
+if (!member) return res.status(400).send({ status: 400, message: "[ ! ] mising query parameter member" });
 const background = req.query.background || "https://r4.wallpaperflare.com/wallpaper/39/346/426/digital-art-men-city-futuristic-night-hd-wallpaper-01b69d213afe95f35634472bcdf74a70.jpg";
 const image = await new Goodbye().setUsername(username).setGuildName(groupname).setGuildIcon(ppgc).setMemberCount(member).setAvatar(ppuser).setBackground(background).toAttachment();
 const buffer = image.toBuffer();
@@ -120,7 +124,7 @@ res.status(500).send({ status: 500, message: "Internal Server Error", error: err
 router.get("/gura", async (req, res) => {
 try {
 let {text} = req.query;
-if (!text) return res.status(400).send({ status: 400, message: "Masukkan parameter text" });
+if (!text) return res.status(400).send({ status: 400, message: "[ ! ] mising query parameter text" });
 const image = await new Gura().setName(text).toAttachment();
 const buffer = image.toBuffer();
 res.set({ "Content-Type": "image/png", "Content-Length": buffer.length });
@@ -138,7 +142,7 @@ res.status(500).send({ status: 500, message: "Internal Server Error", error: err
 router.get("/gfx1", async (req, res) => {
 try {
 let {text} = req.query;
-if (!text) return res.status(400).send({ status: 400, message: "Masukkan parameter text" });
+if (!text) return res.status(400).send({ status: 400, message: "[ ! ] mising query parameter text" });
 const image = await new Gfx1().setName(text).toAttachment();
 const buffer = image.toBuffer();
 res.set({ "Content-Type": "image/png", "Content-Length": buffer.length });
@@ -156,7 +160,7 @@ res.status(500).send({ status: 500, message: "Internal Server Error", error: err
 router.get("/gfx2", async (req, res) => {
 try {
 let {text} = req.query;
-if (!text) return res.status(400).send({ status: 400, message: "Masukkan parameter text" });
+if (!text) return res.status(400).send({ status: 400, message: "[ ! ] mising query parameter text" });
 const image = await new Gfx2().setName(text).toAttachment();
 const buffer = image.toBuffer();
 res.set({ "Content-Type": "image/png", "Content-Length": buffer.length });
@@ -174,7 +178,7 @@ res.status(500).send({ status: 500, message: "Internal Server Error", error: err
 router.get("/gfx3", async (req, res) => {
 try {
 let {text1, text2} = req.query;
-if (!text1 || !text2) return res.status(400).send({ status: 400, message: "Masukkan parameter text1 dan text2" });
+if (!text1 || !text2) return res.status(400).send({ status: 400, message: "[ ! ] mising query parameter text1 dan text2" });
 const image = await new Gfx3().setText1(text1).setText2(text2).toAttachment();
 const buffer = image.toBuffer();
 res.set({ "Content-Type": "image/png", "Content-Length": buffer.length });
@@ -192,7 +196,7 @@ res.status(500).send({ status: 500, message: "Internal Server Error", error: err
 router.get("/gfx4", async (req, res) => {
 try {
 let {text1, text2} = req.query;
-if (!text1 || !text2) return res.status(400).send({ status: 400, message: "Masukkan parameter text1 dan text2" });
+if (!text1 || !text2) return res.status(400).send({ status: 400, message: "[ ! ] mising query parameter text1 dan text2" });
 const image = await new Gfx4().setText1(text1).setText2(text2).toAttachment();
 const buffer = image.toBuffer();
 res.set({ "Content-Type": "image/png", "Content-Length": buffer.length });
@@ -210,7 +214,7 @@ res.status(500).send({ status: 500, message: "Internal Server Error", error: err
 router.get("/gfx5", async (req, res) => {
 try {
 let {text} = req.query;
-if (!text) return res.status(400).send({ status: 400, message: "Masukkan parameter text" });
+if (!text) return res.status(400).send({ status: 400, message: "[ ! ] mising query parameter text" });
 const image = await new Gfx5().setText(text).toAttachment();
 const buffer = image.toBuffer();
 res.set({ "Content-Type": "image/png", "Content-Length": buffer.length });
@@ -225,7 +229,7 @@ res.status(500).send({ status: 500, message: "Internal Server Error", error: err
 router.get("/self-reminder", async (req, res) => {
 try {
 let {text} = req.query;
-if (!text) return res.status(400).send({ status: 400, message: "Masukkan parameter text" });
+if (!text) return res.status(400).send({ status: 400, message: "[ ! ] mising query parameter text" });
 const buffer = await selfReminder(text);
 res.set({ "Content-Type": "image/png", "Content-Length": buffer.length });
 res.send(buffer);
@@ -238,7 +242,7 @@ res.status(500).send({ status: 500, message: "Internal Server Error", error: err
 router.get("/profile", async (req, res) => {
 try {
 let {username, avatar, isPremium, isOwner} = req.query;
-if (!username || !avatar || !isPremium || !isOwner) return res.status(400).send({status: 400, message: "Masukkan parameter username, avatar, isPremium dan isOwner. contoh : ?username=username&avatar=avatar&isPremium=true&isOwner=true"});
+if (!username || !avatar || !isPremium || !isOwner) return res.status(400).send({status: 400, message: "[ ! ] mising query parameter username, avatar, isPremium dan isOwner. contoh : ?username=username&avatar=avatar&isPremium=true&isOwner=true"});
 const buffer = await profile(username, avatar, isPremium === 'true', isOwner === 'true');
 res.set({"Content-Type": "image/png", "Content-Length": buffer.length});
 res.send(buffer);
@@ -251,7 +255,7 @@ res.status(500).send({status: 500, message: "Internal Server Error", error: erro
 router.get("/bewan", async (req, res) => {
 try {
 let {player1, player2, avatar1, avatar2} = req.query;
-if (!player1 || !player2 || !avatar1 || !avatar2) return res.status(400).send({status: 400, message: "Masukkan parameter player1, player2, avatar1 dan avatar2. contoh : ?player1=Udin&player2=Asep&avatar1=&avatar2="});
+if (!player1 || !player2 || !avatar1 || !avatar2) return res.status(400).send({status: 400, message: "[ ! ] mising query parameter player1, player2, avatar1 dan avatar2. contoh : ?player1=Udin&player2=Asep&avatar1=&avatar2="});
 const buffer = await versus(player1, player2, avatar1, avatar2);
 res.set({"Content-Type": "image/png", "Content-Length": buffer.length});
 res.send(buffer);
@@ -298,7 +302,7 @@ res.status(500).send("Failed to load image.");
 router.get('/satzzAI', async(req, res) => {
 try {
 const { text } = req.query;
-if (!text) return res.status(400).send({ status: 400, message: "Masukkan parameter text" });
+if (!text) return res.status(400).send({ status: 400, message: "[ ! ] mising query parameter text" });
 const response = await SatzzAI(text);
 res.status(200).json({
 status: 200,
@@ -316,7 +320,7 @@ if (!kota)
 return res.status(400).json({
 status: false,
 creator: "@krniwnstria",
-message: "Masukkan parameter kota",
+message: "[ ! ] mising query parameter kota",
 });
 let kd = await findKodeDaerah(kota);
 let riss = await jadwalSholat(kd.kode_daerah);
@@ -329,7 +333,7 @@ res.json(riss);
 
 router.get("/yts", async(req, res) => {
 var { query } = req.query;
-if (!query) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter query.'})
+if (!query) return res.status(400).json({ status : false, creator : `@krniwnstria`, message: 'missing parameter query.'})
 let r = await search(query)
 res.json(r)
 })
@@ -338,7 +342,7 @@ res.json(r)
 
 router.get("/ytlist", async(req, res) => {
 var { list } = req.query;
-if (!list) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter list.'})
+if (!list) return res.status(400).json({ status : false, creator : `@krniwnstria`, message: 'missing parameter list.'})
 let r = await yts( { listId: list } )
 res.json(r)
 })
@@ -347,7 +351,7 @@ res.json(r)
 
 router.get("/ytplay", async(req, res) => {
 var { query } = req.query;
-if (!query) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter query.'})
+if (!query) return res.status(400).json({ status : false, creator : `@krniwnstria`, message: 'missing parameter query.'})
 let r1 = await search(query)
 let r = await ytmp3(r1.results[0].url)
 res.json(r)
@@ -359,7 +363,7 @@ res.json(r)
 
 router.get("/ytmp3", async(req, res) => {
 var { url } = req.query;
-if (!url) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
+if (!url) return res.status(400).json({ status : false, creator : `@krniwnstria`, message: 'missing parameter url.'})
 let r = await ytmp3(url)
 res.json(r)
 })
@@ -370,7 +374,7 @@ res.json(r)
 
 router.get("/ytmp4", async(req, res) => {
 var { url } = req.query;
-if (!url) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
+if (!url) return res.status(400).json({ status : false, creator : `@krniwnstria`, message: 'missing parameter url.'})
 let r = await ytmp4(url)
 res.json(r)
 })
@@ -382,7 +386,7 @@ res.json(r)
 
 router.get("/ttstalk", async(req, res) => {
 var { username } = req.query;
-if (!username) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter username.'})
+if (!username) return res.status(400).json({ status : false, creator : `@krniwnstria`, message: 'missing parameter username.'})
 let r = await tiktokStalk(username)
 res.json(r)
 })
@@ -393,7 +397,7 @@ res.json(r)
 
 router.get("/spotify", async(req, res) => {
 var { query } = req.query;
-if (!query) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter query.'})
+if (!query) return res.status(400).json({ status : false, creator : `@krniwnstria`, message: 'missing parameter query.'})
 let r = await spotifySearch(query)
 res.json(r)
 })
@@ -401,7 +405,7 @@ res.json(r)
 
 router.get("/spotifydl", async(req, res) => {
 var { url } = req.query;
-if (!url) return res.status(400).json({ status : false, creator : `SatzzDev`, message: 'missing parameter url.'})
+if (!url) return res.status(400).json({ status : false, creator : `@krniwnstria`, message: 'missing parameter url.'})
 let r = await spotifydl(url)
 res.json(r)
 })
@@ -412,28 +416,29 @@ res.json(r)
 router.get("/removebg", async (req, res) => {
 try {
 const { url } = req.query
-if (!url) return res.status(400).json({ status: false, creator: "SatzzDev", message: "missing parameter url." })
+if (!url) return res.status(400).json({ status: false, creator: "@krniwnstria", message: "missing parameter url." })
 const r = await removebg(url)
 res.json(r)
 } catch (error) {
 console.error("Error in /removebg:", error.message)
-res.status(500).json({ status: false, creator: "SatzzDev", message: "Internal Server Error", error: error })
+res.status(500).json({ status: false, creator: "@krniwnstria", message: "Internal Server Error", error: error })
 }
 })
+
+
+
 
 router.get("/upscaler", async (req, res) => {
 try {
 const { url } = req.query;
-if (!url) return res.status(400).json({ status: false, creator: "SatzzDev", message: "missing parameter url." });
-const r = await upscaler(url);
-if (!r.result) return res.status(400).json({ status: false, creator: "SatzzDev", message: "Failed to get upscale result." });
-const response = await axios.get(r.result, { responseType: "arraybuffer" });
-const buffer = Buffer.from(response.data, "binary");
-res.set({ "Content-Type": "image/png", "Content-Length": buffer.length });
-res.send(buffer);
+if (!url) return res.status(400).json({ status: false, creator: "@krniwnstria", message: "missing parameter url." });
+const b = await getBuffer(url)
+const r = await Upscale(b);
+res.set({ "Content-Type": "image/png", "Content-Length": r.length });
+res.send(r);
 } catch (error) {
 console.error("Error in /upscaler:", error.message);
-res.status(500).json({ status: false, creator: "SatzzDev", message: "Internal Server Error", error: error.message });
+res.status(500).json({ status: false, creator: "@krniwnstria", message: "Internal Server Error", error: error.message });
 }
 });
 
@@ -441,15 +446,29 @@ res.status(500).json({ status: false, creator: "SatzzDev", message: "Internal Se
 
 
 
+router.get("/brat", async (req, res) => {
+try {
+const { text } = req.query;
+if (!text) return res.status(400).json({ status: false, creator: "@krniwnstria", message: "missing parameter text." });
+const r = await brat(text);
+res.set({ "Content-Type": "image/png", "Content-Length": r.length });
+res.send(r);
+} catch (error) {
+console.error("Error in /upscaler:", error.message);
+res.status(500).json({ status: false, creator: "@krniwnstria", message: "Internal Server Error", error: error.message });
+}
+});
+
+
 
 router.get("/surah/:surah", async (req, res) => {
 let { surah } = req.params;
-if (!surah) return res.status(400).json({ status: false, creator: "SatzzDev", message: "Parameter 'surah' surah diperlukan. Contoh: /surah/17" });
+if (!surah) return res.status(400).json({ status: false, creator: "@krniwnstria", message: "Parameter 'surah' surah diperlukan. Contoh: /surah/17" });
 let riss = JSON.parse(fs.readFileSync(path.join(__dirname, 'utils/data/quranaudio.json')))
 let data = riss.filter((item) => item.number === parseInt(surah));
 res.json({
 status: true,
-creator: "SatzzDev",
+creator: "@krniwnstria",
 data,
 });
 });
@@ -465,7 +484,7 @@ return res.status(400).json({
 status: false,
 creator: "@krniwnstria",
 message:
-"Masukkan parameter nomor surah dan ayat, cth: /17/32",
+"[ ! ] mising query parameter nomor surah dan ayat, cth: /17/32",
 });
 let riss = await fetchJson(
 `https://raw.githubusercontent.com/Jabalsurya2105/database/master/surah/surah%20${parseInt(surah)}.json`,
@@ -473,7 +492,7 @@ let riss = await fetchJson(
 let data = riss.ayat.filter((item) => item.no === parseInt(ayat));
 res.json({
 status: true,
-creator: "SatzzDev",
+creator: "@krniwnstria",
 data,
 });
 });
@@ -503,7 +522,7 @@ message: `nomor hadist tidak tersedia, nomor yang tersedia adalah ${riss.availab
 let data = riss.hadits.filter((item) => item.number === parseInt(nomor));
 res.json({
 status: true,
-creator: "SatzzDev",
+creator: "@krniwnstria",
 data,
 });
 });
@@ -542,7 +561,7 @@ male
 
 router.get("/wallpaper/", async (req, res) => {
 const { query, resolusi } = req.query
-if (!query || !resolusi) return res.status(400).json({ status: false, creator: "SatzzDev", message: "Masukkan parameter query dan resolusi contoh: ?query=anime&resolusi=1612x720" })
+if (!query || !resolusi) return res.status(400).json({ status: false, creator: "@krniwnstria", message: "[ ! ] mising query parameter query dan resolusi contoh: ?query=anime&resolusi=1612x720" })
 const avaliableRes = ['2160x3840','1440x2560','1366x768','1080x1920','1024x600','960x544','800x1280','800x600','720x1280','540x960','480x854','480x800','360x640','320x480','320x240','240x400','240x320','3415x3415','2780x2780','3415x3415','2780x2780','1350x2400','1280x1280','938x1668','800x1420','800x1200','1600x1200','1400x1050','1280x1024','1280x960','1152x864','1024x768','3840x2400','3840x2160','2560x1600','2560x1440','2560x1080','2560x1024','2048x1152','1920x1200','1920x1080','1680x1050','1600x900','1440x900','1280x800','1280x720']
 if (!avaliableRes.includes(resolusi)) return res.status(400).json({status:false, creator:"@krniwnstria", message:"Resolusi yang tersedia adalah: "+avaliableRes.join(", ")})
 const { wallpaper } = await import("../routes/utils/wallpaper.js")
@@ -559,7 +578,7 @@ if (!code)
 return res.status(400).json({
 status: false,
 creator: "@krniwnstria",
-message: "Masukkan parameter code!",
+message: "[ ! ] mising query parameter code!",
 });
 let riss = await carbonSH(code);
 res.set({
@@ -583,13 +602,26 @@ if (!url)
 return res.status(400).json({
 status: false,
 creator: "@krniwnstria",
-message: "Masukkan parameter url!",
+message: "[ ! ] mising query parameter url!",
 });
-let { instaDL } = (await import("../routes/utils/snapinsta.js"));
 let riss = await instaDL(url);
 res.json(riss);
 });
 
+
+
+
+router.get("/mediafire", async (req, res) => {
+let { url } = req.query;
+if (!url)
+return res.status(400).json({
+status: false,
+creator: "@krniwnstria",
+message: "[ ! ] mising query parameter url!",
+});
+let riss = await mediafire(url);
+res.json(riss);
+});
 
 
 
@@ -600,7 +632,7 @@ if (!query)
 return res.status(400).json({
 status: false,
 creator: "@krniwnstria",
-message: "Masukkan parameter query!",
+message: "[ ! ] mising query parameter query!",
 });
 let riss = await xnxxsearch(query);
 res.json(riss);
@@ -616,7 +648,7 @@ if (!url)
 return res.status(400).json({
 status: false,
 creator: "@krniwnstria",
-message: "Masukkan parameter url!",
+message: "[ ! ] mising query parameter url!",
 });
 let rissone = await xnxxdl(url);
 let ro = await getBuffer(rissone.files.HLS ? rissone.files.HLS : rissone.files.high ? rissone.files.high : rissone.files.low)
@@ -629,6 +661,31 @@ res.set({
 res.end(ro)
 });
 
+
+
+router.get("/pinterest/:actions", async (req, res) => {
+let { actions } = req.params
+switch (actions) {
+case 'search': {
+let { query } = req.query
+if (!query) return res.status(400).json({ status: false, creator: "@krniwnstria", message: "[ ! ] missing query parameter query!" })
+let r = await pinterest.search(query)
+res.json(r)
+break
+}
+case 'download': {
+let { url } = req.query
+if (!url) return res.status(400).json({ status: false, creator: "@krniwnstria", message: "[ ! ] missing query parameter url!" })
+let r = await pinterest.download(url)
+res.json(r)
+break
+}
+default: {
+res.status(400).json({ status: false, creator: "@krniwnstria", message: "[ ! ] Unknown action provided!" })
+break
+}
+}
+})
 
 
 
