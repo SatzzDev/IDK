@@ -452,14 +452,13 @@ throw error;
 };
 
 
-const { stdout: chromiumPath } = await promisify(exec)("which chromium");
-
-
 const getCookiesAndUserAgent = async (path) => {
     
-    browser = await puppeteer.launch({ 
-    executablePath: chromiumPath.trim(), 
-    args: ["--no-sandbox"]})
+  const browser = await puppeteer.launch({
+  //headless: false,
+  executablePath: '/usr/bin/google-chrome',
+  args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
     page = await browser.newPage();
     await page.goto('https://pxpic.com'+path, { waitUntil: 'domcontentloaded' });
     const cookies = await page.cookies();
