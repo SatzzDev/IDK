@@ -1,7 +1,7 @@
 [
   {
     "name": "AI",
-    "icon": "fas mdi mdi-robot-happy",
+    "icon": "h-5 w-5 mdi mdi-robot-happy-outline",
     "submenu": [
       { "label": "SatzzAI", "link": "/api/satzzai?text=siapa%20anda" },
       { "label": "Remove Background", "link": "/api/removebg?url=" },
@@ -10,7 +10,7 @@
   },
   {
     "name": "Downloader",
-    "icon": "mdi mdi-cloud-download",
+    "icon": "mdi mdi-arrow-down-circle-outline",
     "submenu": [
       {
         "label": "Youtube MP3",
@@ -71,7 +71,7 @@
   },
   {
     "name": "ImageMaker",
-    "icon": "mdi mdi-image-edit",
+    "icon": "mdi mdi-image-edit-outline",
     "submenu": [
       { "label": "Brat", "link": "/api/brat?text=hai" },
       { "label": "Nulis", "link": "/api/nulis?nama=kurkur&kelas=1sd&text=hai" },

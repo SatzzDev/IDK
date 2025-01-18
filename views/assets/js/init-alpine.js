@@ -37,6 +37,18 @@ function data() {
       this.dark = !this.dark
       setThemeToLocalStorage(this.dark)
     },
+    isFullScreen: !!document.fullscreenElement,
+    toggleScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().then(() => {
+          this.isFullScreen = true
+        }).catch(err => console.log(err))
+      } else {
+        document.exitFullscreen().then(() => {
+          this.isFullScreen = false
+        }).catch(err => console.log(err))
+      }
+    },
     ...menuState,
     // Modal
     isModalOpen: false,
