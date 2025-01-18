@@ -17,7 +17,7 @@ await page.goto(`https://soundcloudtool.com`, { waitUntil: "networkidle2", timeo
 await page.type("#urlInput", url, { delay: 100 });
 await Promise.all([
 page.click("#submitBtn"),
-page.waitForNavigation({ waitUntil: "networkidle2" }) // Menunggu navigasi selesai
+page.waitForNavigation({ waitUntil: "networkidle2", timeout: 60000 }) 
 ]);
 const userData = await page.evaluate(() => ({
 title: document.querySelector(".info p")?.innerText || null,
@@ -34,20 +34,45 @@ await browser.close();
 }
 
 export const soundcloudSearch = async (query) => {
-  try {
-    let res = await axios.get('https://proxy.searchsoundcloud.com/tracks?q=' + query.replace(/ /g, '+'));
-    let final = res.data.collection.map(track => ({
-      title: track.title,
-      url: track.permalink_url,
-      artwork: track.artwork_url,
-      duration: track.duration,
-      playback_count: track.playback_count,
-      likes_count: track.likes_count,
-      username: track.user.username,
-    }));
-    return final;
-  } catch (error) {
-    console.error('Error fetching data from SoundCloud:', error.message);
-    throw error;
-  }
+try {
+let res = await axios.get('https://proxy.searchsoundcloud.com/tracks?q=' + query.replace(/ /g, '+'));
+let final = res.data.collection.map(track => ({
+title: track.title,
+author: track.user.username,
+url: track.permalink_url,
+artwork: track.artwork_url,
+duration: millisecondsToTime(track.duration),
+playback_count: formatNumber(track.playback_count),
+total_likes: formatNumber(track.likes_count),
+created_at: track.created_at,
+}));
+return {
+status:true,
+creator:'@krniwnstria',
+result_count: final.length,
+result:final
 };
+} catch (error) {
+return {
+status:false,
+creator:'@krniwnstria',
+message:error.message
+}
+}
+};
+
+
+
+
+
+function millisecondsToTime(milli){
+var milliseconds = milli % 1000;
+var seconds = Math.floor((milli / 1000) % 60);
+var minutes = Math.floor((milli / (60 * 1000)) % 60);
+return minutes + ":" + seconds;
+}
+function formatNumber(num){ 
+if(num >= 1e6) return (num/1e6).toFixed(1) + 'M'; 
+if(num >= 1e3) return (num/1e3).toFixed(1) + 'K'; 
+return num; 
+}

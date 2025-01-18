@@ -3,9 +3,8 @@ import { exec } from "node:child_process";
 import { promisify } from "node:util";
 
 export async function tiktokStalk(username) {
-const { stdout: chromiumPath } = await promisify(exec)("which chromium").catch(() => '/usr/bin/google-chrome');
 const browser = await puppeteer.launch({
-executablePath: 'chromiumPath.trim()',
+executablePath: '/usr/bin/google-chrome',
 args: ["--no-sandbox", "--disable-setuid-sandbox"]
 });
 const page = await browser.newPage();
@@ -19,9 +18,9 @@ timeout: 60000,
 });
 await page.waitForSelector(".search-form__input", { visible: true });
 await page.type(".search-form__input", `${username}`, { delay: 100 });
-await page.waitForSelector(".search-form__button", { visible: true });
+await page.waitForSelector(".search-form__button", { visible: true, timeout: 60000 });
 await page.click(".search-form__button");
-await page.waitForSelector(".user-info__username span", { visible: true });
+await page.waitForSelector(".user-info__username span", { visible: true, timeout: 60000 });
 await page.click(".profile-media-list__button--see-more")
 const userData = await page.evaluate(() => {
 const getText = (selector) => document.querySelector(selector)?.innerText || null;
