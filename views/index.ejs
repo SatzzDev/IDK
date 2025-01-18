@@ -7,6 +7,7 @@
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <link href="https://fonts.googleapis.com/css2 family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="./assets/css/tailwind.output.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
 defer></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
@@ -29,7 +30,7 @@ transform: rotate(360deg);
 }
 </style>
 </head>
-<body>
+<body onclick="playBackSounds()">
 <!-- Preloader -->
 <div id="preloader">
 <div class="sk-cube-grid">
@@ -192,7 +193,7 @@ clip-rule="evenodd"></path>
 <div class="container px-6 mx-auto grid">
 <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Dashboard</h2>
 <!-- CTA -->
-<a class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple" href="https://SatzzDev.github.io/Group" target="_blank" title="Join My WhatsApp Group">
+<a class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple animate-pulse" href="https://SatzzDev.github.io/Group" target="_blank" title="Join My WhatsApp Group">
 <div class="flex items-center">
 <i class="fab fa-whatsapp mr-2"></i>
 <span>Join My WhatsApp Group</span>
@@ -214,7 +215,7 @@ clip-rule="evenodd"></path>
 </div>
 <!-- Card -->
 <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-<div class="p-3 mr-4 text-green-500 bg-yellow-100 rounded-full dark:text-green-100 dark:bg-green-500 fas fa-power-off animate-pulse"></div>
+<div class="p-3 mr-4 text-green-500 bg-yellow-100 rounded-lg dark:text-green-100 dark:bg-green-500 fas fa-power-off animate-pulse"></div>
 <div>
 <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
 Server Uptime
@@ -230,7 +231,7 @@ Server Uptime
 </div>
 <!-- Card -->
 <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-<div class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500 fas fa-server animate-pulse">
+<div class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-lg dark:text-blue-100 dark:bg-blue-500 fas fa-server animate-pulse">
 </div>
 <div>
 <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">Total Endpoint</p>
@@ -260,161 +261,15 @@ Server Uptime
 <p class="text-gray-600 dark:text-gray-400 mb-4">
 This API is currently under development. If you encounter any bugs or errors, please don't hesitate to contact us. Your feedback is valuable for improving the service.
 </p>
-</div>
-<div x-data="{
-tracks:[
-{
-title:'DROP BBHC (feat. Silvi WG)',
-cover:'https://i.ytimg.com/vi/vr9M-d0c9Yg/hq720.jpg',
-source:'DROP BBHC (feat. Silvi WG) (128kbps).mp3'
-},
-{
-title: 'Que Pasa',
-cover: 'https://i.ytimg.com/vi/FqoTpD1Mux4/hq720.jpg',
-source: 'Que Pasa (128kbps).mp3'
-},
-{
-title: 'TRUMPET SAKTI',
-cover: 'https://i.ytimg.com/vi/Yb8-LQigHbg/hq720.jpg',
-source: 'TRUMPET SAKTI (128kbps).mp3'
-},
-{
-title: 'Piw Piw',
-cover: 'https://i.ytimg.com/vi/DVkYLWH0_ew/hq720.jpg',
-source: 'Piw Piw (128kbps).mp3'
-},
-{
-title: 'Booty Call',
-cover: 'https://i.ytimg.com/vi/hME9PL2WKiY/hq720.jpg',
-source: 'Booty Call (128kbps).mp3'
-},
-{
-title: 'Dj Piw Piw Jj Bass Beton',
-cover: 'https://i.ytimg.com/vi/mxnUjhi7qPY/hq720.jpg',
-source: 'Dj Piw Piw Jj Bass Beton (128kbps).mp3'
-},
-{
-title: 'NO BOXING NO KECE',
-cover: 'https://i.ytimg.com/vi/6Hy-3hcJqoc/hq720.jpg',
-source: 'NO BOXING NO KECE (128kbps).mp3'
-},
-{
-title: 'CLNDK STREET BOYS',
-cover: 'https://i.ytimg.com/vi/frUZW8DbC3E/hq720.jpg',
-source: 'CLNDK STREET BOYS (128kbps).mp3'
-},
-{
-title: 'DROP OVERHEAT',
-cover: 'https://i.ytimg.com/vi/gPBFPWzWUBY/hq720.jpg',
-source: 'DROP OVERHEAT (128kbps).mp3'
-},
-{
-title: 'DROP MELODY NGEGASS',
-cover: 'https://i.ytimg.com/vi/iY6Hmp_m0v0/hq720.jpg',
-source: 'DROP MELODY NGEGASS (128kbps).mp3'
-},
-{
-title: 'Aria Freaks Stadium',
-cover: 'https://i.ytimg.com/vi/Ww_T0LvY1vI/hq720.jpg',
-source: 'Aria Freaks Stadium (128kbps).mp3'
-},
-{
-title: 'DROP ENAKEUN V5',
-cover: 'https://i.ytimg.com/vi/aGAHR37bXF0/hq720.jpg',
-source: 'DROP ENAKEUN V5 (128kbps).mp3'
-},
-{
-title: 'JJ BBHC V2 RALEY RMX',
-cover: 'https://i.ytimg.com/vi/mQ7kNFknwwI/hq720.jpg',
-source: 'JJ BBHC V2 RALEY RMX (128kbps).mp3'
-},
-{
-title: 'Plastic',
-cover: 'https://i.ytimg.com/vi/pWdN_5ivlwc/hq720.jpg',
-source: 'Plastic (128kbps).mp3'
-},
-{
-title: 'Takutu',
-cover: 'https://i.ytimg.com/vi/hGqjC7O9FCE/hq720.jpg',
-source: 'Takutu (128kbps).mp3'
-},
-{
-title: 'SOUND JJ Party BreakDutch VOL. 01 Melody Kane',
-cover: 'https://i.ytimg.com/vi/M4j3k9I4S5Y/hq720.jpg',
-source: 'SOUND JJ Party BreakDutch VOL. 01 Melody Kane(128kbps).mp3'
-},
-{
-title: 'DROP BBHC',
-cover: 'https://i.ytimg.com/vi/vr9M-d0c9Yg/hq720.jpg',
-source: 'DROP BBHC(128kbps).mp3'
-},
-{
-title: 'Oh Honey',
-cover: 'https://i.ytimg.com/vi/TSlnGkRLARE/hq720.jpg',
-source: 'Oh Honey(128kbps).mp3'
-},
-{
-title: 'Mambo Jambo (feat. dub it)',
-cover: 'https://i.ytimg.com/vi/o0geNmOVuBc/hq720.jpg',
-source: 'Mambo Jambo (feat. dub it)(128kbps).mp3'
-},
-{
-title: 'BEBEK BOXING',
-cover: 'https://i.ytimg.com/vi/k91rG308P6c/hq720.jpg',
-source: 'BEBEK BOXING(128kbps).mp3'
-},
-{
-title: 'Uno Dos Tres',
-cover: 'https://i.ytimg.com/vi/rhdyzSnvBJY/hq720.jpg',
-source: 'Uno Dos Tres(128kbps).mp3'
-},
-{
-title: 'Cartel',
-cover: 'https://i.ytimg.com/vi/J1HR1_uG6VU/hq720.jpg',
-source: 'Cartel(128kbps).mp3'
-},
-{
-title: 'Tequila (Vocal Mix)',
-cover: 'https://i.ytimg.com/vi/XUGuDKdsyn0/hq720.jpg',
-source: 'Tequila (Vocal Mix)(128kbps).mp3'
-}
-],
-currentIndex: 0,
-audio: null,
-isPlaying: false,
-get currentTrack() { return this.tracks[this.currentIndex]; },
-init() { this.audio = new Audio('./audio/' + this.currentTrack.source); this.audio.addEventListener('ended', () => this.nextTrack()); },
-togglePlayPause() { if (this.isPlaying) { this.audio.pause(); } else { this.audio.play(); } this.isPlaying = !this.isPlaying; },
-nextTrack() { this.currentIndex = (this.currentIndex + 1) % this.tracks.length; this.playTrack(); },
-prevTrack() { this.currentIndex = (this.currentIndex - 1 + this.tracks.length) % this.tracks.length; this.playTrack(); },
-playTrack() { this.audio.src = './audio/' + this.currentTrack.source; this.audio.play(); this.isPlaying = true; }
-}" x-init="init">
-<div class="min-w-0 p-4 text-white bg-purple-600 rounded-lg shadow-xs">
-<div class="flex items-center">
-<img :src="currentTrack.cover" alt="Cover Art" class="w-12 h-12 rounded-md object-cover mr-4" />
-<div class="flex-1">
-<h3 class="text-lg font-bold truncate" x-text="currentTrack.title"></h3>
-<div class="flex mt-2 space-x-4">
-<button @click="prevTrack" class="btn btn-circle btn-info">
-<i class="fas fa-step-backward"></i>
-</button>
-<button @click="togglePlayPause" class="btn btn-circle btn-success">
-<i :class="'fas ' + (isPlaying ? 'fa-pause' : 'fa-play')"></i>
-</button>
-<button @click="nextTrack" class="btn btn-circle btn-info">
-<i class="fas fa-step-forward"></i>
-</button>
-</div>
-</div>
-</div>
+<button class="btn btn-outline" onclick="window.location.href = 'https://instagram.com/wa.me/6282170988479'"><i class="mdi mdi-whatsapp"></i></button>
+<button class="btn btn-outline" onclick="window.location.href = 'https://instagram.com/krniwnstria"><i class="mdi mdi-instagram"></i></button>
+<button class="btn btn-outline" onclick="window.location.href = 'https://github.com/SatzzDev'"><i class="mdi mdi-github"></i></button>
 </div>
 </div>
 </div>
 </main>
 </div>
-</div>
 <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
-<script src="./assets/js/script.js">
-</script>
+<script src="./assets/js/script.js"></script>
 </body>
 </html>

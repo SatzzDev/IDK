@@ -54,7 +54,6 @@ app.set("json spaces", 2);
 
 app.use(express.static(path.join(__dirname, 'views')));
 app.use(express.static(path.join(__dirname, 'views/assets')));
-app.use(express.static(path.join(__dirname, 'views/audio')));
 app.set('view engine', 'ejs');
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));

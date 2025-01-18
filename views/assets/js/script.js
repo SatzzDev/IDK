@@ -24,33 +24,17 @@ document.getElementById("upseconds").style=`--value:${res.seconds}`;
 }, 1000);
 
 
-let trackList = [], currentIndex = 0;
-const progressBar = document.getElementById('progressBar');
-const currentTimeEl = document.getElementById('currentTime');
-const totalTimeEl = document.getElementById('totalTime');
-const playIcon = document.getElementById('playIcon');
-const trackListModal = document.getElementById('my_modal_2');
-const trackListContainer = document.getElementById('trackList');
 
-const loadTrack = async (index) => {
-if (index >= 0 && index < trackList.length) {
-const track = trackList[index];
-if (track.downloadUrl) {
-  audio.src = track.downloadUrl; // Gunakan URL yang sudah diunduh
-  document.getElementById('title').innerText = track.title;
-  document.getElementById('cover').src = track.thumbnail;
-  document.getElementById('playIcon').classList.replace(
-    document.getElementById('playIcon').classList.contains('fa-play') ? 'fa-play' : 'fa-pause',
-    'fa-spinner'
-  );
-  document.getElementById('playIcon').classList.add('animate-spin');
-  await audio.play();
-  document.getElementById('playIcon').classList.remove('animate-spin');
-  playIcon.classList.replace('fa-spinner', 'fa-pause');
+let audio = new Audio("/Mr. Loverman.mp3")
+audio.load()
+let isPlaying = false
+async function playBackSounds() {
+if (!isPlaying) {
+audio.play()
+isPlaying = true
 } else {
-  Swal.fire('Error', `Failed to load track: ${track.title}`, 'error');
+//console.log('its playing!')
 }
 }
-};
 
-
+new ClipboardJS('.btn');
