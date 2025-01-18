@@ -266,9 +266,9 @@ res.status(500).json({ status: false, creator: "@krniwnstria", message: "Interna
 });
 router.get("/nulis", async (req, res) => {
 try {
-const { nama, kelas, fakultas, text } = req.query;
-if (!nama || !kelas || !text) return res.status(400).json({ status: false, creator: "@krniwnstria", message: "missing parameter nama kelas and text. optional = fakultas=" });
-const rs = await nulis(nama, kelas, fakultas ? fakultas :'',text);
+const { nama, tanggal, text } = req.query;
+if (!nama || !tanggal || !text) return res.status(400).json({ status: false, creator: "@krniwnstria", message: "missing parameter nama tanggal and text. " });
+const rs = await nulis(nama, tanggal, text);
 res.set({
 "Content-Type": "image/jpeg",
 "Content-Length": rs.length,

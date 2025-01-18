@@ -2,7 +2,7 @@ import puppeteer from "puppeteer";
 import { exec } from "node:child_process";
 import { promisify } from "node:util";
 
-export async function nulis(nama,kelas,fakultas, text) {
+export async function nulis(nama, tanggal, text) {
 const browser = await puppeteer.launch({
 executablePath: '/usr/bin/google-chrome',
 args: ["--no-sandbox", "--disable-setuid-sandbox"]
@@ -11,19 +11,13 @@ args: ["--no-sandbox", "--disable-setuid-sandbox"]
 const page = await browser.newPage();
 await page.setViewport({width: 1080, height: 1080, deviceScaleFactor: 2});
 try {
-await page.goto(`https://jnckmedia.com/nulis`, {
+await page.goto(`https://ahmadghozali-xyz.github.io`, {
 waitUntil: "networkidle2",
-timeout: 60000,
+timeout: 800000,
 });
-await page.click('#date', { delay: 100 });
-await page.waitForSelector('.datepicker');
-//const today = new Date().getDate();
-const todaySelector = `.datepicker .today`;
-await page.click(todaySelector, { delay: 100 });
-await page.type("#name", nama, { delay: 100 });
-await page.type("#kelas", kelas, { delay: 100 });
-await page.type("#fakultas", fakultas, { delay: 100 });
-await page.type("#content", text, { delay: 100 });
+await page.type("#date", tanggal);
+await page.type("#name", nama);
+await page.type("#content", text);
 const memeContainer = await page.$("#defaultCanvas0");
 let screenshotBuffer = await memeContainer.screenshot();
 return screenshotBuffer;
