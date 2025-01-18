@@ -109,5 +109,5 @@ res.status(404).render('404');
 
 //━━━━━━━━━━━━━━━[ Server Initialization ]━━━━━━━━━━━━━━━━━//
 app.listen(app.get("port"), () => {
-console.log(`Server on port ${app.get("port")}`);
+console.log(`METHOD | URL | STATUS | TIME`);
 });

@@ -24,7 +24,7 @@ function data() {
   }
 
   const menuNames = [
-    'Side', 'Notifications', 'Profile', 'AI', 'Downloader', 'Islamic', 'Search', 'ImageMaker'
+    'Side', 'Notifications', 'Profile', 'AI', 'Downloader', 'Islamic', 'Search', 'ImageMaker', 'Stalk'
   ];
 
   const menuState = menuNames.reduce((acc, menuName) => {
