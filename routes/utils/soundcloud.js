@@ -8,7 +8,7 @@ import axios from 'axios';
 export async function soundcloud(url) {
 const browser = await puppeteer.launch({
 executablePath: '/usr/bin/google-chrome',
-args: ["--no-sandbox", "--disable-setuid-sandbox"]
+args: ["--no-sandbox", "--disable-setuid-sandbox","--disable-gpu"]
 });
 const page = await browser.newPage();
 try {
