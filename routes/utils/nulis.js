@@ -3,9 +3,8 @@ import { exec } from "node:child_process";
 import { promisify } from "node:util";
 
 export async function nulis(nama,kelas,fakultas, text) {
-const { stdout: chromiumPath } = await promisify(exec)("which chromium").catch(() => '/usr/bin/google-chrome');
 const browser = await puppeteer.launch({
-executablePath: chromiumPath.trim(),
+executablePath: '/usr/bin/google-chrome',
 args: ["--no-sandbox", "--disable-setuid-sandbox"]
 });
 
