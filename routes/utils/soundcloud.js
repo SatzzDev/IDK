@@ -26,8 +26,11 @@ url: document.querySelector("#trackLink")?.href || null,
 }));
 return { status: true, creator: '@krniwnstria', ...userData };
 } catch (error) {
-console.error("Error:", error.message);
-throw error;
+return {
+status:false,
+creator:'@krniwnstria',
+message:error.message
+}
 } finally {
 await browser.close();
 }

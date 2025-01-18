@@ -541,19 +541,19 @@ router.get("/ytmp3", async(req, res) => {
 var { url } = req.query;
 if (!url) return res.status(400).json({ status : false, creator : `@krniwnstria`, message: 'missing parameter url.'})
 let r = await ytmp3(url)
-res.json(r)
+res.status(200).json(r)
 })
 router.get("/ytmp4", async(req, res) => {
 var { url } = req.query;
 if (!url) return res.status(400).json({ status : false, creator : `@krniwnstria`, message: 'missing parameter url.'})
 let r = await ytmp4(url)
-res.json(r)
+res.status(200).json(r)
 })
 router.get("/spotifydl", async(req, res) => {
 var { url } = req.query;
 if (!url) return res.status(400).json({ status : false, creator : `@krniwnstria`, message: 'missing parameter url.'})
 let r = await spotifydl(url)
-res.json(r)
+res.status(200).json(r)
 })
 router.get("/spotplay", async(req, res) => {
 var { query } = req.query;
@@ -579,7 +579,7 @@ creator: "@krniwnstria",
 message: "[ ! ] mising query parameter url!",
 });
 let riss = await instaDL(url);
-res.json(riss);
+res.status(200).json(riss);
 });
 router.get("/soundclouddl", async (req, res) => {
 let { url } = req.query;
@@ -590,14 +590,7 @@ creator: "@krniwnstria",
 message: "[ ! ] mising query parameter url!",
 });
 let riss = await soundcloud(url);
-let be = await getBuffer(riss.url)
-res.set({
-"Content-Type": "audio/mp3",
-"Content-Length": be.length,
-"Cache-Control": "public, max-age=31536000",
-"Accept-Ranges": "bytes", 
-});
-res.end(be)
+res.status(200).json(riss)
 });
 router.get("/mediafire", async (req, res) => {
 let { url } = req.query;
@@ -608,7 +601,7 @@ creator: "@krniwnstria",
 message: "[ ! ] mising query parameter url!",
 });
 let riss = await mediafire(url);
-res.json(riss);
+res.status(200).json(riss);
 });
 router.get("/xnxxdl", async (req, res) => {
 let { url } = req.query;
