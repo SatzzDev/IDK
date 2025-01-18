@@ -12,9 +12,7 @@ const page = await browser.newPage();
 await page.setViewport({width: 1080, height: 1080, deviceScaleFactor: 2});
 try {
 await page.goto(`https://www.bratgenerator.com`, {
-waitUntil: "networkidle2",
-timeout: 60000,
-});
+waitUntil: "networkidle2"});
 await page.click("#toggleButtonWhite");
 await page.evaluate(() => {
 const inputElement = document.querySelector("#textInput");
