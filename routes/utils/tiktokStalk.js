@@ -3,9 +3,8 @@ import { exec } from "node:child_process";
 import { promisify } from "node:util";
 
 export async function tiktokStalk(username) {
-const { stdout: chromiumPath } = await promisify(exec)("which chromium").catch(() => '/usr/bin/google-chrome');
 const browser = await puppeteer.launch({
-executablePath: chromiumPath.trim(),
+executablePath: 'chromiumPath.trim()',
 args: ["--no-sandbox", "--disable-setuid-sandbox"]
 });
 const page = await browser.newPage();
