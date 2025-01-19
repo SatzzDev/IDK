@@ -1,10 +1,13 @@
 import puppeteer from 'puppeteer';
 import axios from 'axios';
 import CryptoJS from "crypto-js";
+import { exec } from "node:child_process";
+import { promisify } from "node:util";
+import FormData from 'form-data';
 
 
 const getCookiesAndUserAgent = async (url) => {
-// const { stdout: chromiumPath } = await promisify(exec)("which chromium").catch(() => '/usr/bin/google-chrome');
+//const { stdout: chromiumPath } = await promisify(exec)("which chromium").catch(() => '/usr/bin/google-chrome');
 const browser = await puppeteer.launch({
 executablePath: '/usr/bin/google-chrome',
 args: ["--no-sandbox", "--disable-setuid-sandbox"],
@@ -23,7 +26,7 @@ const { cookieHeader, userAgent } = await getCookiesAndUserAgent('https://photob
 const Satzz = await testFetch()
 const keynya = JSON.parse(Satzz)
 const formData = new FormData();
-formData.append('image', buffer, { filename: 'image.png', contentType: 'image/jpg' });
+formData.append('image', buffer,{ filename: 'image.jpg', contentType: 'image/jpg' });
 formData.append('amtext', encodeURIComponent(keynya.amtext)); 
 formData.append('iavmol', encodeURIComponent(keynya.iavmol)); 
 formData.append('slamltol', encodeURIComponent(keynya.slam_ltol))
@@ -51,7 +54,7 @@ headers: {
 return {
 author: "@krniwnstria",
 status: response.status,
-url:response.data.output.url,
+url:response.data.ouput.url,
 };
 } catch (error) {
 return {
