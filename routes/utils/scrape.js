@@ -11,7 +11,7 @@ import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/ge
 import Agent from 'fake-user-agent'
 import path from 'path'
 import { fileURLToPath } from 'url';
-
+import CryptoJS from "crypto-js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -410,98 +410,98 @@ throw error;
 };
 
 
-const getCookiesAndUserAgent = async (path) => {
-
+const getCookiesAndUserAgent = async (url) => {
+// const { stdout: chromiumPath } = await promisify(exec)("which chromium").catch(() => '/usr/bin/google-chrome');
 const browser = await puppeteer.launch({
-//headless: false,
 executablePath: '/usr/bin/google-chrome',
 args: ["--no-sandbox", "--disable-setuid-sandbox"],
 });
-page = await browser.newPage();
-await page.goto('https://pxpic.com'+path, { waitUntil: 'domcontentloaded' });
+const page = await browser.newPage();
+await page.goto(url, { waitUntil: 'domcontentloaded' });
 const cookies = await page.cookies();
-
 const userAgent = await page.evaluate(() => navigator.userAgent);
 const cookieHeader = cookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ');
-
 await browser.close();
-
 return { cookieHeader, userAgent };
 };
 
-export async function removebg(imageUrl) {
-    const response = await fetch('https://pxpic.com/callRemoveBackground', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ imageUrl })
-    });
-    const result = await response.json();
-    return {
-        author: "@krniwnstria",
-        status: 200,
-        url: result.resultImageUrl
-    };
-}
-
-export const upscaler = async (imageUrl) => {
+export async function removebg(buffer) {
+const { cookieHeader, userAgent } = await getCookiesAndUserAgent('https://photobackgroundremover.com');
+const Satzz = await testFetch()
+const keynya = JSON.parse(Satzz)
+const formData = new FormData();
+formData.append('image', buffer, { filename: 'image.png', contentType: 'image/png' });
+formData.append('amtext', encodeURIComponent(keynya.amtext)); 
+formData.append('iavmol', encodeURIComponent(keynya.iavmol)); 
+formData.append('slamltol', encodeURIComponent(keynya.slam_ltol))
 try {
-const { cookieHeader, userAgent } = await getCookiesAndUserAgent('/ai-image-upscaler');
-const headers = {
-'Accept': '*/*',
-'Accept-Encoding': 'gzip, deflate, br',
-'Accept-Language': 'en-US,en;q=0.9,id-ID;q=0.8,id;q=0.7',
-'Content-Type': 'application/json',
-'Cookie': `
-_ga=GA1.1.1586499107.1737122382; _gcl_au=1.1.68531219.1737122468; __gpi=UID=00000fee105c5c21:T=1737122387:RT=1737125447:S=ALNI_Mbu3LR0wY-XWTy6sIQWOonn51NyjA; _ga_46LKPKHGCC=GS1.1.1737125591.2.0.1737125595.0.0.0; __gads=ID=9edd057d47ee4679:T=1737122387:RT=1737126224:S=ALNI_MbxMhyp3hekex1U6hbPzR7jKWlllg; __eoi=ID=46ce50a6c0e63bfc:T=1737122387:RT=1737126224:S=AA-AfjYo7g1Z0vhDqsX2qVEu0RK0; FCNEC=%5B%5B%22AKsRol_3gdMeUawYGT43ROGxtryJDyZHSEWfgaGcZ-BiKu5nzlgvF9e3FfVEGu1CVeAD82C8aaVVwhFmrceMoV5cZ-zknSlps7zg4XCztWgXOzN84fsB9gjFsl7Xl4DH4_TKLIK-FIuh0106fIY8hWxIqXbNUcctAA%3D%3D%22%5D%5`,
-'User-Agent':'Postify/1.0.0',
-'Origin': 'https://pxpic.com',
-'Sec-Ch-Ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
-'Sec-Ch-Ua-Mobile': '?0',
-'Sec-Ch-Ua-Platform': '"Windows"',
-'Sec-Fetch-Dest': 'empty',
-'Sec-Fetch-Mode': 'cors',
-'Sec-Fetch-Site': 'same-origin'
+const response = await axios.post(
+'https://photobackgroundremover.com/wp-content/plugins/remove_background/requests/image_background_removal.php',
+formData,
+{
+headers: {
+...formData.getHeaders(),
+'Cookie': cookieHeader,
+'Origin':'https://photobackgroundremover.com',
+'Refer':'https://photobackgroundremover.com/',
+'Sec-Ch-Ua':'"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+'Sec-Ch-Ua-Mobile':'?0',
+'Sec-Ch-Ua-Platform':'"Windows"',
+'Sec-Fetch-Dest':'empty',
+'Sec-Fetch-Mode':'cors',
+'Sec-Fetch-Site':'same-origin',
+'User-Agent': userAgent,
+'X-Requested-With':'XMLHttpRequest'
+},
+}
+);
+return {
+author: "@krniwnstria",
+status: response.status,
+url:response.data.output.url,
 };
-const { data } = await axios.post('https://pxpic.com/callAiFunction', {
-imageUrl: imageUrl,
-targetFormat: "png",
-fileOriginalExtension: 
-imageUrl.endsWith('.jpg') ? 'jpg' :
-imageUrl.endsWith('.jpeg') ? 'jpeg' :
-imageUrl.endsWith('.png') ? 'png' :
-imageUrl.endsWith('.gif') ? 'gif' :
-imageUrl.endsWith('.bmp') ? 'bmp' :
-imageUrl.endsWith('.webp') ? 'webp' :
-imageUrl.endsWith('.tiff') ? 'tiff' :
-imageUrl.endsWith('.heif') ? 'heif' :
-imageUrl.endsWith('.svg') ? 'svg' : 'unknown',
-needCompress: "no",
-imageQuality: "100",
-compressLevel: "6",
-aiFunction: "upscale",
-upscalingLevel: "4"
-}, { headers });
-
-return { status: true, creator: "@krniwnstria", result: data.resultImageUrl };
 } catch (error) {
-return { status: false, creator: "@krniwnstria", message: error.message };
-}
+return {
+author: "@krniwnstria",
+status: error.response?.status || 500,
+data: error.response?.data || error.message
 };
-
-// When you're done using the browser session, you can call browser.close()
-const closeBrowser = async () => {
-if (browser) {
-await browser.close();
-browser = null;
-page = null;
-cookies = [];
 }
-};
+}
 
 
 
+function cyphereddata(t, r="cryptoJS") {
+t = t.toString();
+var e = CryptoJS.lib.WordArray.random(256)
+, a = CryptoJS.lib.WordArray.random(16)
+, i = CryptoJS.PBKDF2(r, e, {
+hasher: CryptoJS.algo.SHA512,
+keySize: 8,
+iterations: 999
+})
+, n = CryptoJS.AES.encrypt(t, i, {
+iv: a
+});
+return JSON.stringify({
+amtext: CryptoJS.enc.Base64.stringify(n.ciphertext),
+slam_ltol: CryptoJS.enc.Hex.stringify(e),
+iavmol: CryptoJS.enc.Hex.stringify(a)
+})
+}
 
+
+async function testFetch() {
+try {
+let t = await fetch("https://photobackgroundremover.com/wp-content/plugins/remove_background/unix.php");
+if (t.ok) {
+let r = await t.text();
+return cyphereddata(r)
+}
+throw Error("Error: " + t.status)
+} catch (e) {
+throw Error("Request failed: " + e.message)
+}
+}
 
 //━━━━━━━━━━━━━━━[ END OF DOWNLOADER ]━━━━━━━━━━━━━━━━━//

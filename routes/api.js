@@ -17,7 +17,7 @@ import { mediafire } from './utils/mediafire.js';
 import { xnxxsearch, xnxxdl } from './utils/xnxx.js';
 import { tiktokStalk } from './utils/tiktokStalk.js';
 import { findKodeDaerah, jadwalSholat } from "./utils/jadwal-sholat.js";
-import { ytmp3, ytmp4, transcript, upscaler, removebg, search, SatzzAI } from './utils/scrape.js';
+import { ytmp3, ytmp4, transcript, removebg, search, SatzzAI } from './utils/scrape.js';
 import { spotifySearch, spotifydl } from './utils/spotify.js';
 import {selfReminder, profile, versus} from './utils/canvas.js';
 import {Welcome, Goodbye,  Gura, Gfx1, Gfx2, Gfx3, Gfx4, Gfx5 } from '@lyncx/canvas'
@@ -51,6 +51,23 @@ return res.data
 return err 
 }
 }
+const getBufferV2 = async (url) => {
+try {
+const res = await axios({
+method: "get",
+url,
+headers: {
+'DNT': 1,
+'Upgrade-Insecure-Request': 1
+},
+responseType: 'arraybuffer'
+});
+return Buffer.from(res.data); 
+} catch (err) {
+console.error("Error in getBuffer:", err.message);
+throw new Error(`Failed to fetch buffer from URL: ${url}. ${err.message}`);
+}
+};
 
 
 
@@ -358,8 +375,9 @@ router.get("/removebg", async (req, res) => {
 try {
 const { url } = req.query
 if (!url) return res.status(400).json({ status: false, creator: "@krniwnstria", message: "missing parameter url." })
-const r = await removebg(url)
-res.json(r)
+const buf = await getBuffer(url)
+const buffer = await removebg(buf)
+res.json(buffer)
 } catch (error) {
 console.error("Error in /removebg:", error.message)
 res.status(500).json({ status: false, creator: "@krniwnstria", message: "Internal Server Error", error: error })
