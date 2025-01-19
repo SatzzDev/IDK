@@ -81,7 +81,7 @@ origin: 'https://yt.savetube.me/',
 'user-agent': 'Postify/1.0.0',
 'Content-Type': 'application/json'
 };
-const umber = [51,54,56,57,58,59,60,61,62,63,64,65,66]
+const umber = [51,54,61,63]
 const cdnNumber = umber[Math.floor(Math.random() * umber.length)]
 const cdnUrl = `cdn${cdnNumber}.savetube.su`;
 const videoInfoResponse = await axios.post(
@@ -126,126 +126,6 @@ message: error.message
 }
 }
 
-const cnv = {
-getfile: async (url, format, value) => {
-try {
-let videoId = getYouTubeVideoId(url)
-let cekData = await cnv.cekDatabase(url, format, value)
-if (cekData.success && cekData.data.server_path) {
-return {
-status: true,
-quality: value == 1 ? `${format}kbps` : `${format}p`,
-availableQuality: value == 1 ? audio : video,
-url: cekData.data.server_path,
-filename: (`${videoId}`) + (value == 1 ? ` (${format}kbps).mp3` : ` (${format}p).mp4`)
-};
-} else {
-let down = await cnv.download(url, format, value)
-let base = await cnv.toDatabase(url, down.download_link, format, value)
-return {
-status: true,
-quality: value == 1 ? `${format}kbps` : `${format}p`,
-availableQuality: value == 1 ? audio : video,
-url: down.download_link,
-filename: (`${videoId}`) + (value == 1 ? ` (${format}kbps).mp3` : ` (${format}p).mp4`)
-};
-}
-} catch (error) {
-return {
-status: false,
-message: error.message
-};
-}
-},
-cekDatabase: async (url, format, value) => {
-try {
-let videoId = getYouTubeVideoId(url)
-const response = await axios.post(
-'https://cnvmp3.com/check_database.php', {
-'youtube_id': videoId,
-'quality': format,
-'formatValue': value
-}, {
-headers: {
-'Content-Type': 'application/json',
-'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36',
-'Referer': 'https://cnvmp3.com/'
-}
-}
-);
-return response.data
-} catch (error) {
-return {
-success: false,
-message: error.message
-};
-}
-},
-toDatabase: async (url, file, format, value) => {
-try {
-let videoId = getYouTubeVideoId(url)
-const response = await axios.post(
-'https://cnvmp3.com/insert_to_database.php', {
-'youtube_id': videoId,
-'server_path': file,
-'quality': format,
-'title': videoId,
-'formatValue': value
-}, {
-headers: {
-'Content-Type': 'application/json',
-'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36',
-'Referer': 'https://cnvmp3.com/'
-}
-}
-);
-return response.data
-} catch (error) {
-return {
-success: false,
-message: error.message
-};
-}
-},
-download: async (url, format, value) => {
-try {
-let videoId = getYouTubeVideoId(url)
-const response = await axios.post(
-'https://cnvmp3.com/download_video.php', {
-'url': url,
-'quality': format,
-'title': videoId,
-'formatValue': value
-}, {
-headers: {
-'Content-Type': 'application/json',
-'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36',
-'Referer': 'https://cnvmp3.com/'
-}
-}
-);
-return response.data
-} catch (error) {
-return {
-success: false,
-message: error.message
-};
-}
-}
-}
-
-const inv = {
-getfile: async (url, format, value) => {
-let videoId = getYouTubeVideoId(url)
-return {
-status: true,
-quality: value == 140 ? `${format}kbps` : `${format}p`,
-availableQuality: [format],
-url: `https://inv.nadeko.net/latest_version?id=${videoId}&itag=${value}&local=true`,
-filename: (`${videoId}`) + (value == 140 ? ` (${format}kbps).mp3` : ` (${format}p).mp4`)
-};
-}
-}
 
 export const ytmp3 = async(link, formats = 128) => {
 const videoId = getYouTubeVideoId(link);
@@ -260,10 +140,10 @@ try {
 let data = await yts("https://youtube.com/watch?v=" + videoId);
 let response = await savetube("https://youtube.com/watch?v=" + videoId, format, 1)
 if (!response.status) {
-response = await inv.getfile("https://youtube.com/watch?v=" + videoId, 128, 140)
+response = await savetube("https://youtube.com/watch?v=" + videoId, format, 1)
 }
 if (!response.status) {
-response = await cnv.getfile("https://youtube.com/watch?v=" + videoId, format, 1)
+response = await savetube("https://youtube.com/watch?v=" + videoId, format, 1)
 }
 return {
 status: true,
@@ -293,10 +173,10 @@ try {
 let data = await yts("https://youtube.com/watch?v=" + videoId);
 let response = await savetube("https://youtube.com/watch?v=" + videoId, format, 0)
 if (!response.status) {
-response = await cnv.getfile("https://youtube.com/watch?v=" + videoId, format, 0)
+response = await savetube("https://youtube.com/watch?v=" + videoId, format, 0)
 }
 if (!response.status) {
-response = await inv.getfile("https://youtube.com/watch?v=" + videoId, 360, 18)
+response = await savetube("https://youtube.com/watch?v=" + videoId, format, 0)
 }
 return {
 status: true,
