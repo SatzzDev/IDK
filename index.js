@@ -3,6 +3,8 @@ import morgan from "morgan";
 import cors from "cors";
 import path from "path";
 import os from "os";
+import * as cheerio from 'cheerio';
+import axios from 'axios';
 import fs from 'fs';
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
@@ -107,6 +109,8 @@ res.status(404).render('404');
 });
 
 //━━━━━━━━━━━━━━━[ Server Initialization ]━━━━━━━━━━━━━━━━━//
-app.listen(app.get("port"), () => {
-console.log(`METHOD | URL | STATUS | TIME`);
+
+
+app.listen(app.get("port"), async() => {
+console.log("RUNNING!")
 });

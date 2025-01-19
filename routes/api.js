@@ -15,9 +15,11 @@ import { instaDL } from './utils/instagram.js';
 import { soundcloud, soundcloudSearch } from './utils/soundcloud.js';
 import { mediafire } from './utils/mediafire.js';
 import { xnxxsearch, xnxxdl } from './utils/xnxx.js';
+import { removebg } from './utils/removebg.js'
 import { tiktokStalk } from './utils/tiktokStalk.js';
 import { findKodeDaerah, jadwalSholat } from "./utils/jadwal-sholat.js";
-import { ytmp3, ytmp4, transcript, removebg, search, SatzzAI } from './utils/scrape.js';
+import { SatzzAI } from './utils/ai.js';
+import { ytmp3, ytmp4, transcript, search } from './utils/ytdl.js'
 import { spotifySearch, spotifydl } from './utils/spotify.js';
 import {selfReminder, profile, versus} from './utils/canvas.js';
 import {Welcome, Goodbye,  Gura, Gfx1, Gfx2, Gfx3, Gfx4, Gfx5 } from '@lyncx/canvas'

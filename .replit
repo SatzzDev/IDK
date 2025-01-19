@@ -1,5 +1,5 @@
 run = "npm run dev"
-modules = ["nix", "nodejs-20", "python-3.11", "web"]
+modules = ["nodejs-20", "nix", "web"]
 
 [deployment]
 run = ["sh", "-c", "npm run dev"]
