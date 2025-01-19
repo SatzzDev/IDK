@@ -23,7 +23,7 @@ const { cookieHeader, userAgent } = await getCookiesAndUserAgent('https://photob
 const Satzz = await testFetch()
 const keynya = JSON.parse(Satzz)
 const formData = new FormData();
-formData.append('image', buffer, { filename: 'image.png', contentType: 'image/png' });
+formData.append('image', buffer, { filename: 'image.png', contentType: 'image/jpg' });
 formData.append('amtext', encodeURIComponent(keynya.amtext)); 
 formData.append('iavmol', encodeURIComponent(keynya.iavmol)); 
 formData.append('slamltol', encodeURIComponent(keynya.slam_ltol))
