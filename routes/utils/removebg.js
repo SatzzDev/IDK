@@ -54,7 +54,7 @@ headers: {
 return {
 author: "@krniwnstria",
 status: response.status,
-url:response.data.ouput.url,
+url:response.data.output.url,
 };
 } catch (error) {
 return {
