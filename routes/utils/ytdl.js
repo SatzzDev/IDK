@@ -14,14 +14,11 @@ await new Promise(resolve => setTimeout(resolve, 2000))
 
 return {
 status: true,
-creator: '@krniwnstria',
-...downloadInit.info,
 url:downloadUrl
 }
 } catch (error) {
 return {
 status: false,
-creator: '@krniwnstria',
 msg: error.message
 }
 }
