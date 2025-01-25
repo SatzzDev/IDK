@@ -118,7 +118,7 @@ console.log("RUNNING!")
 
 
 
-//const { stdout: chromiumPath } = await promisify(exec)("which chromium")
+const { stdout: chromiumPath } = await promisify(exec)("which chromium")
 export const browser = await puppeteer.launch({
-executablePath:'/usr/bin/google-chrome',
+executablePath:chromiumPath.trim(),
 args:["--no-sandbox","--disable-setuid-sandbox"]});
