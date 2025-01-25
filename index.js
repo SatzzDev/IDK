@@ -26,28 +26,6 @@ extractRoutes(app._router.stack);
 return routes.sort();
 };
 
-function formatUptime(uptime) {
-let seconds = Math.floor(uptime % 60);
-let minutes = Math.floor((uptime / 60) % 60);
-let hours = Math.floor((uptime / 3600) % 24);
-let days = Math.floor(uptime / 86400);
-
-if (days > 0) {
-return { days: `${days}d`, hours: hours.toString(), minutes: minutes.toString(), seconds: seconds.toString() };
-}
-return { hours: hours.toString(), minutes: minutes.toString(), seconds: seconds.toString() };
-}
-
-const listGetEndpoints = (app) => {
-const routes = [];
-app._router.stack.forEach((middleware) => {
-if (middleware.route && middleware.route.methods.get) {
-routes.push(middleware.route.path);
-}
-});
-return routes;
-};
-
 //━━━━━━━━━━━━━━━[ App Configuration ]━━━━━━━━━━━━━━━━━//
 app.set("port", process.env.PORT || 80);
 
@@ -64,8 +42,6 @@ app.use(express.json());
 
 //━━━━━━━━━━━━━━━[ Morgan Logging for Specific Routes ]━━━━━━━━━━━━━━━━━//
 let requestCount = 100;
-
-// Morgan hanya untuk route '/' dan '/api'
 app.use((req, res, next) => {
 if (req.originalUrl === "/" || req.originalUrl.startsWith("/api")) {
 morgan("dev")(req, res, next);
@@ -73,26 +49,12 @@ morgan("dev")(req, res, next);
 next();
 }
 });
-
-// Total request counter
 app.use((req, res, next) => {
 requestCount++;
 next();
 });
 
 //━━━━━━━━━━━━━━━[ Routes ]━━━━━━━━━━━━━━━━━//
-app.get("/uptime", (req, res) => res.json(formatUptime(process.uptime())));
-
-app.get("/status", (req, res) => {
-res.json({
-platform: os.platform(),
-cpu_model: os.cpus()[0].model,
-free_ram: (os.freemem() / Math.pow(1024, 3)).toFixed(2) + " GB",
-ram: (os.totalmem() / Math.pow(1024, 3)).toFixed(2) + " GB",
-runtime: formatUptime(process.uptime()),
-request: requestCount
-});
-});
 
 app.use("/api", apiRoutes);
 const menuItems = JSON.parse(fs.readFileSync(path.join(__dirname, 'menu.json'), 'utf8'));
@@ -118,7 +80,7 @@ console.log("RUNNING!")
 
 
 
-const { stdout: chromiumPath } = await promisify(exec)("which chromium")
+//const { stdout: chromiumPath } = await promisify(exec)("which chromium")
 export const browser = await puppeteer.launch({
-executablePath:chromiumPath.trim(),
+executablePath:'/usr/bin/google-chrome',
 args:["--no-sandbox","--disable-setuid-sandbox"]});
