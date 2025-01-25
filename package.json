@@ -25,7 +25,7 @@
     "moment-timezone": "^0.5.46",
     "morgan": "^1.10.0",
     "os": "^0.1.2",
-    "puppeteer": "^24.0.0",
+    "puppeteer": "^24.1.1",
     "request": "^2.88.2",
     "ssl-express-www": "^3.2.1",
     "undici": "^7.2.3",

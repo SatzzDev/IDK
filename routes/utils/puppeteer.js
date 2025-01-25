@@ -1,19 +1,12 @@
-import puppeteer from "puppeteer";
-import { exec } from "node:child_process";
-import { promisify } from "node:util";
 import path from 'path';
 import { fileURLToPath } from 'url';
-
+import { browser } from '../../index.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 export async function carbonSH(codeSnippet) {
 const theme = "Verminal"; // Theme for Carbon
-const browser = await puppeteer.launch({
-//headless: false,
-executablePath: '/usr/bin/google-chrome',
-args: ["--no-sandbox", "--disable-setuid-sandbox"],
-});
+
 const page = await browser.newPage();
 await page.setViewport({width: 1080, height: 1080, deviceScaleFactor: 2});
 await page.goto("https://carbon.now.sh/xsP2TOBZdgtM0krXAZPZ", { waitUntil: "networkidle2" });

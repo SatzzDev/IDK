@@ -1,15 +1,9 @@
-import puppeteer from "puppeteer";
-import { exec } from "node:child_process";
-import { promisify } from "node:util";
+import { browser } from '../../index.js'
 import axios from 'axios';
 
 
 
 export async function soundcloud(url) {
-const browser = await puppeteer.launch({
-executablePath: '/usr/bin/google-chrome',
-args: ["--no-sandbox", "--disable-setuid-sandbox","--disable-gpu"]
-});
 const page = await browser.newPage();
 try {
 await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");

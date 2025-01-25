@@ -1,17 +1,11 @@
-import puppeteer from 'puppeteer';
 import axios from 'axios';
 import CryptoJS from "crypto-js";
-import { exec } from "node:child_process";
-import { promisify } from "node:util";
+import { browser } from '../../index.js'
 import FormData from 'form-data';
 
 
 const getCookiesAndUserAgent = async (url) => {
 //const { stdout: chromiumPath } = await promisify(exec)("which chromium").catch(() => '/usr/bin/google-chrome');
-const browser = await puppeteer.launch({
-executablePath: '/usr/bin/google-chrome',
-args: ["--no-sandbox", "--disable-setuid-sandbox"],
-});
 const page = await browser.newPage();
 await page.goto(url, { waitUntil: 'domcontentloaded' });
 const cookies = await page.cookies();

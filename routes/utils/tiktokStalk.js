@@ -1,12 +1,6 @@
-import puppeteer from "puppeteer";
-import { exec } from "node:child_process";
-import { promisify } from "node:util";
+import { browser } from '../../index.js'
 
 export async function tiktokStalk(username) {
-const browser = await puppeteer.launch({
-executablePath: '/usr/bin/google-chrome',
-args: ["--no-sandbox", "--disable-setuid-sandbox","--disable-gpu"]
-});
 const page = await browser.newPage();
 try {
 await page.setUserAgent(

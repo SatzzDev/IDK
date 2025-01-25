@@ -3,8 +3,9 @@ import morgan from "morgan";
 import cors from "cors";
 import path from "path";
 import os from "os";
-import * as cheerio from 'cheerio';
-import axios from 'axios';
+import puppeteer from "puppeteer";
+import { exec } from "node:child_process";
+import { promisify } from "node:util";
 import fs from 'fs';
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
@@ -114,3 +115,10 @@ res.status(404).render('404');
 app.listen(app.get("port"), async() => {
 console.log("RUNNING!")
 });
+
+
+
+//const { stdout: chromiumPath } = await promisify(exec)("which chromium")
+export const browser = await puppeteer.launch({
+executablePath:'/usr/bin/google-chrome',
+args:["--no-sandbox","--disable-setuid-sandbox"]});
