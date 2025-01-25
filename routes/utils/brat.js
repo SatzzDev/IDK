@@ -1,6 +1,13 @@
-import { browser } from '../../index.js'
+import puppeteer from "puppeteer";
+import { exec } from "node:child_process";
+import { promisify } from "node:util";
 
 export async function brat(text) {
+const browser = await puppeteer.launch({
+executablePath: '/usr/bin/google-chrome',
+args: ["--no-sandbox", "--disable-setuid-sandbox","--disable-gpu"]
+});
+
 const page = await browser.newPage();
 await page.setViewport({width: 1080, height: 1080, deviceScaleFactor: 2});
 try {
