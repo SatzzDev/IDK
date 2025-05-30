@@ -1,12 +1,10 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { browser } from '../../index.js'
+import puppeteer from "puppeteer";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 export async function carbonSH(codeSnippet) {
+const browser = await puppeteer.launch({
+executablePath: '/usr/bin/google-chrome' ,//'/nix/store/zi4f80l169xlmivz8vja8wlphq74qqk0-chromium-125.0.6422.141/bin/chromium', //,
+args:["--no-sandbox", "--disable-setuid-sandbox"]});
 const theme = "Verminal"; // Theme for Carbon
-
 const page = await browser.newPage();
 await page.setViewport({width: 1080, height: 1080, deviceScaleFactor: 2});
 await page.goto("https://carbon.now.sh/xsP2TOBZdgtM0krXAZPZ", { waitUntil: "networkidle2" });
@@ -35,3 +33,6 @@ console.log("Code block not found!");
 await browser.close();
 return screenshotBuffer;
 }
+
+
+  
